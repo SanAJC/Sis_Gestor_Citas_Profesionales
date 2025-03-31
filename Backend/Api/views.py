@@ -1,4 +1,3 @@
-# appointments/views.py
 from rest_framework import viewsets , status
 from .models import User, ProfessionalProfile, Reservation, Notification
 from .serializers import UserSerializer, ProfessionalProfileSerializer, ReservationSerializer, NotificationSerializer
@@ -46,6 +45,31 @@ class AuthViewSet(viewsets.ModelViewSet):
             user = serializer.save()
             return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['post'], url_path='refresh_token')
+    def refresh_token(self,request):
+
+        refresh_token = request.data.get("refresh_token")
+
+        if not refresh_token:
+            return Response(
+                {"error":"Refresh-Token is required"}
+            )
+        
+        try:
+            token = RefreshToken(refresh_token)
+            new_access_token = token.access_token
+            return Response(
+                {
+                    "access_token": str(new_access_token)
+                },
+                status=status.HTTP_200_OK
+            )
+        except TokenError as e:
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
     
 
 class ProfessionalProfileViewSet(viewsets.ModelViewSet):

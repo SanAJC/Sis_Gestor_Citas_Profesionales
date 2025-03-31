@@ -1,4 +1,3 @@
-# appointments/serializers.py
 from rest_framework import serializers
 from .models import User, ProfessionalProfile, Reservation, Notification
 from django.contrib.auth import authenticate
