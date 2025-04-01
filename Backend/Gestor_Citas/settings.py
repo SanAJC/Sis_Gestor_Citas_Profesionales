@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,6 +33,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+FRONTEND_URL = os.getenv('FRONTEND_URL')
 
 # Application definition
 
@@ -40,11 +46,47 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'Api',
+    'Authentication',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    'rest_framework.authtoken',
+    'corsheaders',
 ]
+
+# Configuración del ID del sitio (necesario para django-allauth)
+SITE_ID = 1
+
+# Configuracion para el proveedor de Google
+
+GOOGLE_OAUTH_CLIENT_ID = os.getenv('GOOGLE_OAUTH_CLIENT_ID')
+GOOGLE_OAUTH_CLIENT_SECRET = os.getenv('GOOGLE_OAUTH_CLIENT_SECRET')
+GOOGLE_OAUTH_CALLBACK_URL = os.getenv('GOOGLE_OAUTH_CALLBACK_URL')
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APPS': [
+            {
+                'client_id': GOOGLE_OAUTH_CLIENT_ID,
+                'secret': GOOGLE_OAUTH_CLIENT_SECRET,
+                'key': '',
+            }
+        ],
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
+        
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -52,9 +94,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# CORS Configuration
+CORS_ALLOW_ALL_ORIGINS = True
+
 ROOT_URLCONF = 'Gestor_Citas.urls'
 
-AUTH_USER_MODEL = 'Api.User'
+AUTH_USER_MODEL = 'Authentication.User'
 
 TEMPLATES = [
     {
@@ -98,6 +143,15 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
+REST_AUTH = {
+    'USE_JWT': True,
+    'SIGNUP_FIELDS': {
+        'username': {'required': True},  
+        'email': {'required': True},     
+    }
+}
+
+REST_USE_JWT = True
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
@@ -109,6 +163,7 @@ SIMPLE_JWT = {
 
 INSTALLED_APPS += [
     'rest_framework_simplejwt.token_blacklist',
+
 ]
 
 # Password validation

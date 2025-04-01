@@ -2,7 +2,10 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+import warnings
 
+warnings.filterwarnings("ignore", message="app_settings.USERNAME_REQUIRED is deprecated")
+warnings.filterwarnings("ignore", message="app_settings.EMAIL_REQUIRED is deprecated")
 
 def main():
     """Run administrative tasks."""
