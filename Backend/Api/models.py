@@ -21,9 +21,11 @@ class Reservation(models.Model):
     ]
     estado = models.CharField(max_length=1, choices=ESTADOS, default='P')
     cliente = models.ForeignKey(User, on_delete=models.CASCADE, related_name='citas_clientes')
+    profesional = models.ForeignKey(ProfessionalProfile, on_delete=models.CASCADE, related_name='citas_profesionales',null=True,blank=True)
     fecha = models.DateTimeField()
     hora_inicio = models.TimeField()
     hora_fin = models.TimeField()
+    google_calendar_event_id = models.CharField(max_length=255, blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -37,6 +39,7 @@ class Reservation(models.Model):
         # Validar disponibilidad: evitar solapamientos
         citas_conflictivas = Reservation.objects.filter(
             cliente=self.cliente,
+            profesional=self.profesional,
             fecha=self.fecha,
             hora_inicio__lt=self.hora_fin,
             hora_fin__gt=self.hora_inicio

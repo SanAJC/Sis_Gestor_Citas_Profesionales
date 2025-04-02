@@ -76,8 +76,8 @@ SOCIALACCOUNT_PROVIDERS = {
                 'key': '',
             }
         ],
-        'SCOPE': ['profile', 'email'],
-        'AUTH_PARAMS': {'access_type': 'online'},
+        'SCOPE': ['profile', 'email', 'https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/calendar.events'],
+        'AUTH_PARAMS': {'access_type': 'offline'},
         
     }
 }
