@@ -3,18 +3,10 @@ from googleapiclient.discovery import build
 from django.conf import settings
 from allauth.socialaccount.models import SocialToken, SocialAccount
 import datetime
-from django.utils import timezone
 
 class GoogleCalendarService:
-    """
-    Servicio para interactuar con la API de Google Calendar
-    """
-    
     @staticmethod
     def get_credentials(user):
-        """
-        Obtiene las credenciales de Google para un usuario específico
-        """
         try:
             social_account = SocialAccount.objects.get(user=user, provider='google')
             social_token = SocialToken.objects.get(account=social_account)
@@ -34,16 +26,12 @@ class GoogleCalendarService:
     
     @staticmethod
     def create_calendar_event(user, reservation):
-        """
-        Crea un evento en Google Calendar para una reservación
-        """
         credentials = GoogleCalendarService.get_credentials(user)
         if not credentials:
             return None
         
         service = build('calendar', 'v3', credentials=credentials)
         
-        # Formatear fecha y hora para Google Calendar
         start_datetime = datetime.datetime.combine(reservation.fecha, reservation.hora_inicio)
         end_datetime = datetime.datetime.combine(reservation.fecha, reservation.hora_fin)
         
@@ -77,24 +65,20 @@ class GoogleCalendarService:
     
     @staticmethod
     def update_calendar_event(user, reservation, event_id):
-        """
-        Actualiza un evento existente en Google Calendar
-        """
         credentials = GoogleCalendarService.get_credentials(user)
         if not credentials:
             return False
         
         service = build('calendar', 'v3', credentials=credentials)
         
-        # Formatear fecha y hora para Google Calendar
+        
         start_datetime = datetime.datetime.combine(reservation.fecha, reservation.hora_inicio)
         end_datetime = datetime.datetime.combine(reservation.fecha, reservation.hora_fin)
         
         # Obtener evento existente
         try:
             event = service.events().get(calendarId='primary', eventId=event_id).execute()
-            
-            # Actualizar evento
+
             event['summary'] = f'Cita con {reservation.cliente.username}'
             event['description'] = f'Reservación ID: {reservation.id}'
             event['start'] = {
@@ -114,9 +98,6 @@ class GoogleCalendarService:
     
     @staticmethod
     def delete_calendar_event(user, event_id):
-        """
-        Elimina un evento de Google Calendar
-        """
         credentials = GoogleCalendarService.get_credentials(user)
         if not credentials:
             return False
