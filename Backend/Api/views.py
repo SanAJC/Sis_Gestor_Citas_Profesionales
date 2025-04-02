@@ -62,7 +62,7 @@ class ReservationViewSet(viewsets.ModelViewSet):
             mensaje=mensaje
         )
     
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['get'], url_path='my-reservations')
     def my_reservations(self, request):
         user = request.user
         reservations = Reservation.objects.filter(cliente=user)
