@@ -1,0 +1,273 @@
+.personal-data-form-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    max-height: 100vh;
+  }
+  
+  /* Efecto de fondo con desenfoque */
+  .personal-data-form-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    filter: blur(20px);
+    z-index: -1;
+    transform: scale(1.1);
+  }
+  
+  @keyframes gradientBG {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  .personal-data-form {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 3rem;
+    border-radius: 30px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(4px);
+    width: 90%;
+    max-width: 1000px;
+    transform: translateY(0);
+    animation: floatForm 6s ease-in-out infinite;
+  }
+  
+  @keyframes floatForm {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  .personal-data-form h2 {
+    color: #333;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    text-align: center;
+    background: linear-gradient(45deg, #FF512F, #F09819);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: titlePulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes titlePulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+  
+  .form-subtitle {
+    color: #666;
+    margin-bottom: 3rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 2px;
+  }
+  
+  .form-group {
+    position: relative;
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .form-group:hover {
+    transform: translateX(5px);
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.8rem;
+    color: #444;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .form-group:hover label {
+    color: #ff6b6b;
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border: 2px solid transparent;
+    border-radius: 15px;
+    font-size: 1rem;
+    color: #333;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.2);
+    transform: translateY(-2px);
+  }
+  
+  .form-group select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1.5rem center;
+    background-size: 1.2em;
+    padding-right: 3rem;
+    cursor: pointer;
+  }
+  
+  .submit-button {
+    width: 100%;
+    padding: 1.2rem;
+    background: linear-gradient(45deg, #ff6b6b, #ffa502);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 3rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .submit-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
+    transition: 0.5s;
+  }
+  
+  .submit-button:hover::before {
+    left: 100%;
+  }
+  
+  .submit-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 20px rgba(255, 107, 107, 0.4);
+  }
+  
+  .submit-button:active {
+    transform: translateY(-1px);
+  }
+  
+  /* Efectos de hover y focus mejorados */
+  .form-group input:hover,
+  .form-group select:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Animación para los campos cuando aparecen */
+  .form-group {
+    opacity: 0;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+  
+  .form-group:nth-child(1) { animation-delay: 0.2s; }
+  .form-group:nth-child(2) { animation-delay: 0.4s; }
+  .form-group:nth-child(3) { animation-delay: 0.6s; }
+  .form-group:nth-child(4) { animation-delay: 0.8s; }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Estilos para el placeholder */
+  .form-group input::placeholder {
+    color: #999;
+    opacity: 0.7;
+  }
+  
+  /* Responsive design mejorado */
+  @media (max-width: 768px) {
+    .personal-data-form {
+      padding: 2rem;
+      width: 95%;
+    }
+  
+    .personal-data-form h2 {
+      font-size: 2rem;
+    }
+  
+    .form-subtitle {
+      font-size: 1rem;
+    }
+  
+    .form-group input,
+    .form-group select {
+      padding: 0.9rem 1.2rem;
+    }
+  
+    .submit-button {
+      padding: 1rem;
+      font-size: 1rem;
+    }
+  }
+  
+  /* Efecto de brillo en los bordes del formulario */
+  .personal-data-form::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 32px;
+    z-index: -1;
+    animation: borderGlow 3s linear infinite;
+    opacity: 0.5;
+  }
+  
+  @keyframes borderGlow {
+    0% {
+      filter: blur(5px);
+    }
+    50% {
+      filter: blur(10px);
+    }
+    100% {
+      filter: blur(5px);
+    }
+  }
