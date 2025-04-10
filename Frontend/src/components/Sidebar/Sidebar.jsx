@@ -4,8 +4,9 @@ import EventNoteIcon from '@mui/icons-material/EventNote'
 import PersonIcon from '@mui/icons-material/Person'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import './Sidebar.css'
-
+import { useAuth } from '../../context/AuthContext';
 const Sidebar = () => {
+  const { logout } = useAuth();
   return (
     <div className="sidebar">
       <div className="sidebar-menu">
@@ -24,10 +25,10 @@ const Sidebar = () => {
           <PersonIcon />
           <span>Perfil</span>
         </Link>
-        <Link to="/salir" className="menu-item">
+        <button onClick={logout} className="menu-item">
           <ExitToAppIcon />
           <span>Salir</span>
-        </Link>
+        </button>
       </div>
     </div>
   )

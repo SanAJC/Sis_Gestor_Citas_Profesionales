@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './LoginForm.css';
 import { FcGoogle } from 'react-icons/fc';
+import { useAuth } from '../../context/AuthContext';
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login, user, error: authError, initiateGoogleLogin } = useAuth();
+  
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -12,6 +16,21 @@ const LoginForm = () => {
 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+
+  // Check for any messages passed from other components (like register success)
+  useEffect(() => {
+    if (location.state?.message) {
+      setMessage(location.state.message);
+    }
+  }, [location]);
+
+  // Redirect if user is already logged in
+  useEffect(() => {
+    if (user) {
+      navigate('/app');
+    }
+  }, [user, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,10 +46,10 @@ const LoginForm = () => {
     setLoading(true);
 
     try {
-      await authService.login(formData);
-      navigate('/dashboard'); // Redirige al usuario al dashboard después del login
+      await login(formData);
+      navigate('/app'); // Redirige al usuario a la app después del login
     } catch (err) {
-      setError(err.message || 'Error al iniciar sesión');
+      setError(err.message || authError || 'Error al iniciar sesión');
     } finally {
       setLoading(false);
     }
@@ -38,14 +57,8 @@ const LoginForm = () => {
 
   const handleGoogleLogin = () => {
     console.log('Google login clicked');
-    
-    // Guardar un indicador simple de autenticación
-    localStorage.setItem('isLoggedIn', 'true');
-    
-    // Redirigir al usuario a la página principal con el menú
-    navigate('/app');
+    initiateGoogleLogin();
   };
-
   return (
     <div className="login-container">
       <div className="login-form-container">

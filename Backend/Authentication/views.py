@@ -29,7 +29,7 @@ class AuthViewSet(viewsets.ModelViewSet):
         serializer = LoginSerializer(data=request.data)
 
         if serializer.is_valid(raise_exception=True):
-            user = serializer.validated_data['user']
+            user = serializer.validated_data
             refresh = RefreshToken.for_user(user)
             access = AccessToken.for_user(user)
             return Response({
@@ -45,7 +45,7 @@ class AuthViewSet(viewsets.ModelViewSet):
             refresh_token = request.data['refresh']
             token = RefreshToken(refresh_token)
             token.blacklist()
-            return Response({})
+            return Response(status=status.HTTP_200_OK)
         except (InvalidToken, TokenError):
             return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
     
@@ -79,14 +79,22 @@ class AuthViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_401_UNAUTHORIZED
             )
 
+class CustomOAuth2Client(OAuth2Client):
+    def __init__(self, *args, **kwargs):
+        # Elimina 'scope_delimiter' en caso de existir
+        kwargs.pop('scope_delimiter', None)
+        super().__init__(*args, **kwargs)
 
 class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
     callback_url = settings.GOOGLE_OAUTH_CALLBACK_URL
-    client_class = OAuth2Client
+    client_class = CustomOAuth2Client
+    
     
     def get_response(self):
         response = super().get_response()
         if self.user:
+            print("User found in GoogleLogin.get_response:", self.user)
             response.data['user'] = UserSerializer(self.user).data
         return response
+

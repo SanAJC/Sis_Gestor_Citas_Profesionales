@@ -1,18 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './RegisterForm.css';
 import { FcGoogle } from 'react-icons/fc';
+import { useAuth } from '../../context/AuthContext';
 
 const RegisterForm = () => {
   const navigate = useNavigate();
+  const { register, user, error: authError } = useAuth();
+  
   const [formData, setFormData] = useState({
-    nombre_usuario: '',
-    telefono: '',
+    username: '',
+    phone: '',
     email: '',
     password: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  // Redirect if user is already logged in
+  useEffect(() => {
+    if (user) {
+      navigate('/app');
+    }
+  }, [user, navigate]);
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,28 +31,27 @@ const RegisterForm = () => {
       [name]: value
     }));
   };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      await authService.register(formData);
+      await register(formData);
       // Redirigir al login después de un registro exitoso
       navigate('/login', { state: { message: 'Registro exitoso. Inicia sesión.' } });
     } catch (err) {
-      setError(err.message || 'Error al registrar usuario');
+      setError(err.message || authError || 'Error al registrar usuario');
     } finally {
       setLoading(false);
     }
   };
  
-
   const handleGoogleRegister = () => {
-    // Aquí irá la lógica de registro con Google
-    console.log('Google register clicked');
-    // Si el registro con Google es exitoso, redirigir al usuario a la aplicación
-    // navigate("/app");
+    // La autenticación con Google requiere implementación adicional
+    // que conecte con el backend de Django
+    alert('El registro con Google está en desarrollo');
   };
 
   return (
@@ -56,9 +65,9 @@ const RegisterForm = () => {
             <div className="form-group">
               <input
                 type="text"
-                name="nombre_usuario"
+                name="username"
                 placeholder="Nombre_Usuario"
-                value={formData.nombre_usuario}
+                value={formData.username}
                 onChange={handleChange}
                 required
               />
@@ -66,9 +75,9 @@ const RegisterForm = () => {
             <div className="form-group">
               <input
                 type="tel"
-                name="telefono"
+                name="phone"
                 placeholder="Numero de teléfono"
-                value={formData.telefono}
+                value={formData.phone}
                 onChange={handleChange}
                 required
               />

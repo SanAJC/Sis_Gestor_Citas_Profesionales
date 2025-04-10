@@ -1,46 +1,67 @@
 import React from 'react'
-import { Route, Routes, Navigate } from "react-router-dom";
-import { useEffect, useState } from 'react';
+import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import Sidebar from '../components/Sidebar/Sidebar.jsx';
 import RegisterForm from '../components/Sidebar/RegisterForm.jsx';
 import LoginForm from '../components/Sidebar/LoginForm';
 import AppointmentForm from '../components/Sidebar/AppointmentForm'
 import PersonalDataForm from '../components/Sidebar/PersonalDataForm'
 import { HomePage } from '../pages/MainContent.jsx';
+import { useAuth } from '../context/AuthContext';
 import '../App.css'
+import GoogleCallback from '../components/Auth/GoogleCallback';
 
+const ProtectedRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+  const location = useLocation();
 
-export  const AppRouter = () => {
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
 
-    // Estado simple para manejar la autenticación
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
-  // Verificar si el usuario está autenticado al cargar la aplicación
-  useEffect(() => {
-    const loginStatus = localStorage.getItem('isLoggedIn');
-    if (loginStatus === 'true') {
-      setIsLoggedIn(true);
-    }
-  }, []);
-  
-  // Función simple para cerrar sesión (puedes añadirla a tu Sidebar o donde necesites)
-  const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    setIsLoggedIn(false);
-  };
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return children;
+};
+
+export const AppRouter = () => {
+  const { user } = useAuth();
+
   return (
     <Routes>
-        {/* Rutas públicas */}
-        <Route path="/register" element={<RegisterForm />} />
-        <Route path="/login" element={<LoginForm />} />
+      {/* Rutas públicas */}
+      <Route path="/register" element={<RegisterForm />} />
+      <Route path="/login" element={<LoginForm />} />
+      <Route path="/auth/google/callback" element={<GoogleCallback />} />
 
-        {/* Redirección por defecto */}
-        <Route path="/" element={<Navigate to={isLoggedIn ? "/app" : "/login"} replace />} />
+      {/* Redirección por defecto */}
+      <Route path="/" element={<Navigate to={user ? "/app" : "/login"} replace />} />
 
-        <Route path="/app" element={<HomePage />} />
-        <Route path="/crear-cita" element={<AppointmentForm />} />
-        <Route path="/formulario-persona" element={< PersonalDataForm/>} />
-        <Route path="/consultar-citas" element={<div>Consulta de Citas</div>} />
+      {/* Rutas protegidas */}
+      <Route path="/app" element={
+        <ProtectedRoute>
+          <HomePage />
+        </ProtectedRoute>
+      } />
+      <Route path="/crear-cita" element={
+        <ProtectedRoute>
+          <AppointmentForm />
+        </ProtectedRoute>
+      } />
+      <Route path="/formulario-persona" element={
+        <ProtectedRoute>
+          <PersonalDataForm />
+        </ProtectedRoute>
+      } />
+      <Route path="/consultar-citas" element={
+        <ProtectedRoute>
+          <div>Consulta de Citas</div>
+        </ProtectedRoute>
+      } />
+
+      {/* Ruta para manejar páginas no encontradas */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
 }
