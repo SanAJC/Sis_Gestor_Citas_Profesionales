@@ -8,7 +8,7 @@ import PersonalDataForm from '../components/Sidebar/PersonalDataForm'
 import { HomePage } from '../pages/MainContent.jsx';
 import { useAuth } from '../context/AuthContext';
 import '../App.css'
-import GoogleCallback from '../components/Auth/GoogleCallback';
+
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -33,7 +33,7 @@ export const AppRouter = () => {
       {/* Rutas públicas */}
       <Route path="/register" element={<RegisterForm />} />
       <Route path="/login" element={<LoginForm />} />
-      <Route path="/auth/google/callback" element={<GoogleCallback />} />
+      
 
       {/* Redirección por defecto */}
       <Route path="/" element={<Navigate to={user ? "/app" : "/login"} replace />} />

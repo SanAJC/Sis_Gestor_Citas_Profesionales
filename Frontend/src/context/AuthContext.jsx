@@ -70,9 +70,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const initiateGoogleLogin = async () => {
-    await authService.initiateGoogleLogin();
-  };
 
   const value = {
     user,
@@ -82,7 +79,6 @@ export const AuthProvider = ({ children }) => {
     register,
     logout,
     isAuthenticated: authService.isAuthenticated,
-    initiateGoogleLogin
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

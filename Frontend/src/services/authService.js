@@ -63,28 +63,7 @@ const authService = {
     }
   },
 
-  initiateGoogleLogin: async () => {
-    try {
-      const clientId = import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID;
-      const redirectUri = import.meta.env.VITE_GOOGLE_OAUTH_CALLBACK_URL;
-      
-      // Construir la URL según el formato de django-allauth
-      const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` + 
-        `redirect_uri=${encodeURIComponent(redirectUri)}` + 
-        `&prompt=consent` + 
-        `&response_type=code` + 
-        `&client_id=${encodeURIComponent(clientId)}` + 
-        `&scope=${encodeURIComponent('profile email https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events')}` + 
-        `&access_type=offline`;
-      
-      // Redireccionar
-      window.location.href = authUrl;
-    } catch (error) {
-      console.error('Error during Google login:', error);
-    }
-  },
-
-
+  
   
   isAuthenticated: () => {
     return !!localStorage.getItem('access_token');

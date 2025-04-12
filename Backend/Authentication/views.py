@@ -9,16 +9,6 @@ from rest_framework.response import Response
 from rest_framework.decorators import action ,permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
-import requests
-import json
-from django.shortcuts import redirect
-from django.urls import reverse
-
-from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-from dj_rest_auth.registration.views import SocialLoginView
-from django.conf import settings
-from allauth.socialaccount.providers.oauth2.client import OAuth2Client
-
 
 class AuthViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -78,23 +68,4 @@ class AuthViewSet(viewsets.ModelViewSet):
                 {"error": str(e)},
                 status=status.HTTP_401_UNAUTHORIZED
             )
-
-class CustomOAuth2Client(OAuth2Client):
-    def __init__(self, *args, **kwargs):
-        # Elimina 'scope_delimiter' en caso de existir
-        kwargs.pop('scope_delimiter', None)
-        super().__init__(*args, **kwargs)
-
-class GoogleLogin(SocialLoginView):
-    adapter_class = GoogleOAuth2Adapter
-    callback_url = settings.GOOGLE_OAUTH_CALLBACK_URL
-    client_class = CustomOAuth2Client
-    
-    
-    def get_response(self):
-        response = super().get_response()
-        if self.user:
-            print("User found in GoogleLogin.get_response:", self.user)
-            response.data['user'] = UserSerializer(self.user).data
-        return response
 

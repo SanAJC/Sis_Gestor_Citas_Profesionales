@@ -7,7 +7,7 @@ import { useAuth } from '../../context/AuthContext';
 const LoginForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, user, error: authError, initiateGoogleLogin } = useAuth();
+  const { login, user, error: authError } = useAuth();
   
   const [formData, setFormData] = useState({
     email: '',
@@ -55,10 +55,7 @@ const LoginForm = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    console.log('Google login clicked');
-    initiateGoogleLogin();
-  };
+  
   return (
     <div className="login-container">
       <div className="login-form-container">
@@ -98,7 +95,9 @@ const LoginForm = () => {
 
           <button 
             className="google-button"
-            onClick={handleGoogleLogin}
+            onClick={() =>
+              window.location.href = "http://127.0.0.1:8000/accounts/google/login/"
+            }
           >
             <FcGoogle className="google-icon" />
             Continuar con Google

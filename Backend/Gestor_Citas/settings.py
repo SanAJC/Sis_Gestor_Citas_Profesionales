@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
+    'rest_framework.authtoken',
     'rest_framework',
     'Api',
     'Authentication',
@@ -52,35 +54,33 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-    'dj_rest_auth',
-    'dj_rest_auth.registration',
-    'rest_framework.authtoken',
-    'corsheaders',
 ]
 
-# Configuración del ID del sitio (necesario para django-allauth)
+# Configuración para Google
 SITE_ID = 1
 
-# Configuracion para el proveedor de Google
-
-GOOGLE_OAUTH_CLIENT_ID = os.getenv('GOOGLE_OAUTH_CLIENT_ID')
-GOOGLE_OAUTH_CLIENT_SECRET = os.getenv('GOOGLE_OAUTH_CLIENT_SECRET')
-GOOGLE_OAUTH_CALLBACK_URL = os.getenv('GOOGLE_OAUTH_CALLBACK_URL')
-
+# Configuración específica del proveedor Google
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
-        'APPS': [
-            {
-                'client_id': GOOGLE_OAUTH_CLIENT_ID,
-                'secret': GOOGLE_OAUTH_CLIENT_SECRET,
-                'key': '',
-            }
+        'SCOPE': [ # Los permisos que solicitas
+            'profile',
+            'email',
         ],
-        'SCOPE': ['profile', 'email', 'https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/calendar.events'],
-        'AUTH_PARAMS': {'access_type': 'offline'},
-        
+        'AUTH_PARAMS': { # Parámetros adicionales para la autenticación
+            'access_type': 'online',
+        },
+        'OAUTH_PKCE_ENABLED': True, # Recomendado para seguridad
     }
 }
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend', # standard django backend
+    'allauth.account.auth_backends.AuthenticationBackend', # all auth backend
+]
+
+LOGIN_REDIRECT_URL = FRONTEND_URL
+LOGOUT_REDIRECT_URL = '/'
+SOCIALACCOUNT_LOGIN_ON_GET = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -143,15 +143,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
-REST_AUTH = {
-    'USE_JWT': True,
-    'SIGNUP_FIELDS': {
-        'username': {'required': True},  
-        'email': {'required': True},     
-    }
-}
-
-REST_USE_JWT = True
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
