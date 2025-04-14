@@ -8,17 +8,18 @@ import PersonalDataForm from '../components/Sidebar/PersonalDataForm'
 import { HomePage } from '../pages/MainContent.jsx';
 import { useAuth } from '../context/AuthContext';
 import '../App.css'
-
+import LoginSuccess from '../components/Google/LoginSuccess';
 
 const ProtectedRoute = ({ children }) => {
-  const { user, loading } = useAuth();
-  const location = useLocation();
+    const { user, loading } = useAuth();
+    const access_token = localStorage.getItem('access_token');
+    const location = useLocation();
 
-  if (loading) {
-    return <div>Cargando...</div>;
-  }
+    if (loading) {
+        return <div>Cargando...</div>;
+    }
 
-  if (!user) {
+  if (!access_token) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
@@ -27,16 +28,17 @@ const ProtectedRoute = ({ children }) => {
 
 export const AppRouter = () => {
   const { user } = useAuth();
+  const access_token = localStorage.getItem('access_token');
 
   return (
     <Routes>
       {/* Rutas públicas */}
       <Route path="/register" element={<RegisterForm />} />
       <Route path="/login" element={<LoginForm />} />
+      <Route path="/login/callback" element={<LoginSuccess />} />
       
-
       {/* Redirección por defecto */}
-      <Route path="/" element={<Navigate to={user ? "/app" : "/login"} replace />} />
+      <Route path="/" element={<Navigate to={access_token ? "/app" : "/login"} replace />} />
 
       {/* Rutas protegidas */}
       <Route path="/app" element={

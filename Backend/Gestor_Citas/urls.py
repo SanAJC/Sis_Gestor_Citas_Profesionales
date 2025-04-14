@@ -16,10 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+from Authentication import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('Api.urls')),
     path('api/auth/', include('Authentication.urls')),
     path('accounts/', include('allauth.urls')),
+    path('callback/', views.google_login_callback, name='callback')
 ]

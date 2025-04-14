@@ -78,9 +78,9 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend', # all auth backend
 ]
 
-LOGIN_REDIRECT_URL = FRONTEND_URL
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/callback/'
 SOCIALACCOUNT_LOGIN_ON_GET = True
+SOCIALACCOUNT_STORE_TOKENS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -9,6 +9,11 @@ from rest_framework.response import Response
 from rest_framework.decorators import action ,permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from allauth.socialaccount.models import SocialAccount , SocialToken
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+import urllib.parse
+import json
 
 class AuthViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -46,8 +51,8 @@ class AuthViewSet(viewsets.ModelViewSet):
             user = serializer.save()
             return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    @action(detail=False, methods=['post'], url_path='refresh_token')
+    
+    @action(detail=False, methods=['post'], url_path='refresh_token',permission_classes=[AllowAny])
     def refresh_token(self,request):
         refresh_token = request.data.get("refresh_token")
         if not refresh_token:
@@ -69,3 +74,42 @@ class AuthViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_401_UNAUTHORIZED
             )
 
+
+
+@login_required
+def google_login_callback(request):
+    user = request.user
+
+    social_accounts = SocialAccount.objects.filter(user=user)
+    print("Social Account for user:", social_accounts)
+
+    social_account = social_accounts.first()
+
+    if not social_account:
+        print("No social account for user:", user)
+        return redirect('http://localhost:5173/login/callback/?error=NoSocialAccount')
+    
+    token = SocialToken.objects.filter(account=social_account, account__provider='google').first()
+
+    if token:
+        print('Google token found:', token.token)
+        refresh = RefreshToken.for_user(user)
+        user_data = {
+            'id': user.id,
+            'email': user.email,
+            'username': getattr(user, 'username', '') or user.email.split('@')[0],
+        }
+        tokens = {
+            'access': str(refresh.access_token),
+            'refresh': str(refresh)
+        }
+        payload = {
+            'user': user_data,
+            'tokens': tokens
+        }
+        encoded_data = urllib.parse.quote(json.dumps(payload))
+
+        return redirect(f'http://localhost:5173/login/callback/?data={encoded_data}')
+    else:
+        print('No Google token found for user', user)
+        return redirect(f'http://localhost:5173/login/callback/?error=NoGoogleToken')
