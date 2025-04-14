@@ -22,5 +22,7 @@ urlpatterns = [
     path('api/', include('Api.urls')),
     path('api/auth/', include('Authentication.urls')),
     path('accounts/', include('allauth.urls')),
-    path('callback/', views.google_login_callback, name='callback')
+    path('callback/', views.google_login_callback, name='callback'),
+    path('google-account-status/', views.google_account_status, name='google_account_status'),
+    path('connect-google-account/', views.connect_google_account, name='connect_google_account')    
 ]

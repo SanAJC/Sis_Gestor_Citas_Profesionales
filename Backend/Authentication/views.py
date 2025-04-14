@@ -113,3 +113,22 @@ def google_login_callback(request):
     else:
         print('No Google token found for user', user)
         return redirect(f'http://localhost:5173/login/callback/?error=NoGoogleToken')
+
+
+@permission_classes([IsAuthenticated])
+def google_account_status(request):
+    user = request.user
+    has_google_account = SocialAccount.objects.filter(
+        user=user, 
+        provider='google'
+    ).exists()
+    
+    return Response({
+        'has_google_account': has_google_account
+    })
+
+@login_required
+def connect_google_account(request):
+
+    return redirect('/accounts/google/login/?process=connect&next=/callback/')
+

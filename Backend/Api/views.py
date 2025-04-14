@@ -1,15 +1,19 @@
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
+from rest_framework.decorators import action ,permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import ProfessionalProfile, Reservation, Notification
 from .serializers import ProfessionalProfileSerializer, ReservationSerializer, NotificationSerializer
 from Authentication.google_calendar import GoogleCalendarService
 from allauth.socialaccount.models import SocialAccount
 
+
+@permission_classes([IsAuthenticated])
 class ProfessionalProfileViewSet(viewsets.ModelViewSet):
     queryset = ProfessionalProfile.objects.all()
     serializer_class = ProfessionalProfileSerializer
 
+@permission_classes([IsAuthenticated])
 class ReservationViewSet(viewsets.ModelViewSet):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
@@ -18,6 +22,19 @@ class ReservationViewSet(viewsets.ModelViewSet):
         reservation = serializer.save()
         self._sync_with_google_calendar(reservation)
         self._create_notification(reservation, "creada")
+
+        user = reservation.cliente
+        has_google_account = SocialAccount.objects.filter(
+            user=user, 
+            provider='google'
+        ).exists()
+
+        if not has_google_account:
+            Notification.objects.create(
+                user=user,
+                mensaje="¿Quieres recibir recordatorios en Google Calendar? Vincula tu cuenta de Google para sincronizar tus citas automáticamente.",
+                leido=False,
+            )
     
     def perform_update(self, serializer):
         reservation = serializer.save()
@@ -69,6 +86,7 @@ class ReservationViewSet(viewsets.ModelViewSet):
         serializer = ReservationSerializer(reservations, many=True)
         return Response(serializer.data)
 
+@permission_classes([IsAuthenticated])
 class NotificationViewSet(viewsets.ModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
