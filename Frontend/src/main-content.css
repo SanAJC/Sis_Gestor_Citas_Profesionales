@@ -1,30 +1,35 @@
 .main-content {
   flex: 1;
-  padding: 20px;
-  background-color: #D9D9D9;
-  margin: 20px;
-  border-radius: 25px;
+  padding: 2.5rem;
+  background-color: #f5f5f5;
+  margin: 2rem;
+  border-radius: 30px;
   height: 100vh;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .header-icons {
   display: flex;
-  gap: 15px;
-  color: #666;
+  gap: 1.25rem;
+  color: #4a4a4a;
 }
 
 .welcome-section {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 3rem;
+  gap: 4rem;
 }
 
 .welcome-text {
@@ -33,48 +38,85 @@
 }
 
 .welcome-text h2 {
-  margin-bottom: 10px;
-  font-size: 24px;
+  margin-bottom: 1.5rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2c2c2c;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
 }
 
 .welcome-text p {
   color: #666;
-  margin-bottom: 15px;
-  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  font-size: 1.1rem;
+  font-weight: 400;
 }
 
 .action-buttons {
   display: flex;
-  gap: 15px;
-  margin-top: 20px;
+  gap: 1.25rem;
+  margin-top: 2.5rem;
 }
 
 .create-button, .consult-button {
   background-color: #FF9800;
   color: white;
-  padding: 12px 30px; 
+  padding: 1rem 2rem;
   border-radius: 15px;
   text-decoration: none;
-  transition: background-color 0.3s;
-  width: auto; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  min-width: 100px; 
+  transition: all 0.3s ease;
+  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.2);
+}
+
+.create-button:hover {
+  background-color: #F57C00;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 152, 0, 0.3);
 }
 
 .consult-button {
-  background-color: #CCCCCC;
-  color: #020101;
+  background-color: #f0f0f0;
+  color: #2c2c2c;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.consult-button:hover {
+  background-color: #e5e5e5;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
 
 .welcome-image {
   flex: 1;
   display: flex;
   justify-content: center;
+  animation: float 6s ease-in-out infinite;
 }
 
 .welcome-image img {
   max-width: 100%;
   height: auto;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
 }

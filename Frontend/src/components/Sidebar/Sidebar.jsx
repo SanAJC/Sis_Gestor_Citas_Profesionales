@@ -27,7 +27,7 @@ const Sidebar = () => {
         </Link>
         <button onClick={logout} className="menu-item">
           <ExitToAppIcon />
-          <span>Salir</span>
+          <span id='santi'>Salir</span>
         </button>
       </div>
     </div>

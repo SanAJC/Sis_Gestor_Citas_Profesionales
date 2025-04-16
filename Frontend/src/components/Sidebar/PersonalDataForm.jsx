@@ -9,12 +9,12 @@ const PersonalDataForm = () => {
     professional: ''
   });
 
-  const professionals = [
-    { id: 1, name: 'Dr. Juan Pérez - Medicina General' },
-    { id: 2, name: 'Dra. María García - Pediatría' },
-    { id: 3, name: 'Dr. Carlos López - Cardiología' },
-    { id: 4, name: 'Dra. Ana Martínez - Dermatología' }
-  ];
+  // const professionals = [
+  //   { id: 1, name: 'Dr. Juan Pérez - Medicina General' },
+  //   { id: 2, name: 'Dra. María García - Pediatría' },
+  //   { id: 3, name: 'Dr. Carlos López - Cardiología' },
+  //   { id: 4, name: 'Dra. Ana Martínez - Dermatología' }
+  // ];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -71,8 +71,8 @@ const PersonalDataForm = () => {
           />
         </div>
 
-        <div className="form-group">
-          <select
+        {/* <div className="form-group"> */}
+          {/* <select
             id="professional"
             name="professional"
             value={formData.professional}
@@ -85,8 +85,8 @@ const PersonalDataForm = () => {
                 {prof.name}
               </option>
             ))}
-          </select>
-        </div>
+          </select> */}
+        {/* </div> */}
 
         <button type="submit" className="submit-button">
           RESERVAR

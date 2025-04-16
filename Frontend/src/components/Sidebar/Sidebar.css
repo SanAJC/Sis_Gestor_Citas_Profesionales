@@ -25,6 +25,17 @@
     padding: 10px;
     border-radius: 8px;
     transition: background-color 0.3s;
+    border: none;          
+    outline: none;         
+    background: none;       
+    box-shadow: none;  
+
+  }
+  
+  #santi{
+   
+    font-size: 17px;
+    
   }
   
   .menu-item:hover {
