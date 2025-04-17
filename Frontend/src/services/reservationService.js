@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { useAuth } from '../context/AuthContext';
 const API_URL = 'http://localhost:8000/api';
 
 const axiosInstance = axios.create({
@@ -24,8 +24,9 @@ axiosInstance.interceptors.request.use(
 const reservationService = {
   // Obtener todas las reservaciones del usuario actual
   getUserReservations: async () => {
+    const {user} = useAuth();
     try {
-      const response = await axiosInstance.get('/reservations/user/');
+      const response = await axiosInstance.get('/citas/my-reservationsr/',{user : user});
       return response.data;
     } catch (error) {
       console.error('Error fetching user reservations:', error);
@@ -34,31 +35,10 @@ const reservationService = {
   },
   
   
-  getAllReservations: async () => {
-    try {
-      const response = await axiosInstance.get('/reservations/');
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching all reservations:', error);
-      throw error;
-    }
-  },
-  
-  // Obtener una reservación específica por ID
-  getReservation: async (id) => {
-    try {
-      const response = await axiosInstance.get(`/reservations/${id}/`);
-      return response.data;
-    } catch (error) {
-      console.error(`Error fetching reservation with ID ${id}:`, error);
-      throw error;
-    }
-  },
-  
   // Crear una nueva reservación
   createReservation: async (reservationData) => {
     try {
-      const response = await axiosInstance.post('/reservations/', reservationData);
+      const response = await axiosInstance.post('/citas/', reservationData);
       return response.data;
     } catch (error) {
       console.error('Error creating reservation:', error);
@@ -69,7 +49,7 @@ const reservationService = {
   // Actualizar una reservación existente
   updateReservation: async (id, reservationData) => {
     try {
-      const response = await axiosInstance.put(`/reservations/${id}/`, reservationData);
+      const response = await axiosInstance.patch(`/citas/${id}/`, reservationData);
       return response.data;
     } catch (error) {
       console.error(`Error updating reservation with ID ${id}:`, error);
@@ -80,7 +60,7 @@ const reservationService = {
   // Cancelar/eliminar una reservación
   cancelReservation: async (id) => {
     try {
-      const response = await axiosInstance.delete(`/reservations/${id}/`);
+      const response = await axiosInstance.delete(`/citas/${id}/`);
       return response.data;
     } catch (error) {
       console.error(`Error canceling reservation with ID ${id}:`, error);
@@ -92,10 +72,21 @@ const reservationService = {
   // Obtener todos los profesionales
   getProfessionals: async () => {
     try {
-      const response = await axiosInstance.get('/professionals/');
+      const response = await axiosInstance.get('/profesionales/');
       return response.data;
     } catch (error) {
       console.error('Error fetching professionals:', error);
+      throw error;
+    }
+  },
+
+  getNotifications: async () => {
+    const {user} = useAuth();
+    try {
+      const response = await axiosInstance.get('/notificaciones/',{user : user});
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
       throw error;
     }
   },

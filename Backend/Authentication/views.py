@@ -73,6 +73,20 @@ class AuthViewSet(viewsets.ModelViewSet):
                 {"error": str(e)},
                 status=status.HTTP_401_UNAUTHORIZED
             )
+    @action(detail=False, methods=['get'], url_path='profile', permission_classes=[IsAuthenticated])
+    def profile(self, request):
+        user = request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['put','patch'], url_path='update-profile', permission_classes=[IsAuthenticated])
+    def update_profile(self, request):
+        user = request.user
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 

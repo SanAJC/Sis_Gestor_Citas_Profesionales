@@ -1,7 +1,6 @@
 import axios from 'axios';
-
+import { useAuth } from '../context/AuthContext';
 const API_URL = 'http://localhost:8000/api/auth/authentication';
-
 const axiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
@@ -63,7 +62,23 @@ const authService = {
     }
   },
 
-  
+  google_account_status: async () => {
+    const {user} = useAuth();
+    try {
+      if (!user) {
+        return false;
+      }
+      const response = await axiosInstance.get('/google-account-status/',{user : user});
+      return response.data;
+    } catch (error) {
+      console.error('Error checking Google account status:', error);
+    }
+    
+  },
+
+  connect_google_account: async () => {
+    return redirect('http://localhost:8000/connect-google-account/')
+  },
   
   isAuthenticated: () => {
     return !!localStorage.getItem('access_token');
