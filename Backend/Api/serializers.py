@@ -5,6 +5,11 @@ from Authentication.models import User
 
 class ProfessionalProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
+    image = serializers.SerializerMethodField()
+    
+    def get_image(self, obj):
+        return obj.image.url if obj.image else None
+    
     class Meta:
         model = ProfessionalProfile
         fields = '__all__'
