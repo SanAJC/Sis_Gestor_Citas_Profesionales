@@ -6,7 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken , AccessToken
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 
 from rest_framework.response import Response
-from rest_framework.decorators import action ,permission_classes
+from rest_framework.decorators import action ,permission_classes, api_view
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from allauth.socialaccount.models import SocialAccount , SocialToken
@@ -129,20 +129,18 @@ def google_login_callback(request):
         return redirect(f'http://localhost:5173/login/callback/?error=NoGoogleToken')
 
 
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def google_account_status(request):
-    user = request.user
+    
     has_google_account = SocialAccount.objects.filter(
-        user=user, 
+        user=request.user,
         provider='google'
     ).exists()
-    
     return Response({
         'has_google_account': has_google_account
     })
 
-@login_required
+
 def connect_google_account(request):
-
-    return redirect('/accounts/google/login/?process=connect&next=/callback/')
-
+    return redirect('/accounts/google/login/?process=connect/')

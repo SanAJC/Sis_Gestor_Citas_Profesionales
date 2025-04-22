@@ -68,6 +68,7 @@ SOCIALACCOUNT_PROVIDERS = {
         ],
         'AUTH_PARAMS': { # Parámetros adicionales para la autenticación
             'access_type': 'online',
+            'prompt': 'select_account',
         },
         'OAUTH_PKCE_ENABLED': True, # Recomendado para seguridad
     }
@@ -79,6 +80,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 LOGIN_REDIRECT_URL = '/callback/'
+LOGOUT_REDIRECT_URL = f'{FRONTEND_URL}/login/'
 SOCIALACCOUNT_LOGIN_ON_GET = True
 SOCIALACCOUNT_STORE_TOKENS = True
 
@@ -128,7 +130,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'gestor_citas',
         'USER': 'postgres',
-        'PASSWORD': 'admi',
+        'PASSWORD': 'san_ats',
         'HOST': 'localhost',
         'PORT': '5432',
     }

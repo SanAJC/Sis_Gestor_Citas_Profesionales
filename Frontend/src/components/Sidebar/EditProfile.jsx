@@ -9,8 +9,7 @@ const EditProfile = () => {
   const { user } = useAuth();
   const [googleAccountStatus, setGoogleAccountStatus] = useState(null);
   const [formData, setFormData] = useState({
-    nombre: '',
-    apellido: '',
+    username: '',
     email: '',
     notificaciones: true
   });
@@ -19,10 +18,8 @@ const EditProfile = () => {
     
     if (user) {
       setFormData({
-        nombre: user.nombre || '',
-        apellido: user.apellido || '',
+        username: user.username || '',
         email: user.email || '',
-        notificaciones: user.notificaciones !== undefined ? user.notificaciones : true
       });
     }
   }, [user]);
@@ -75,32 +72,15 @@ const EditProfile = () => {
           <div className="form-section">
             <div className="form-row">
               <div className="form-group half">
-                <label htmlFor="nombre">Nombre</label>
+                <label htmlFor="username">Nombre de Usuario</label>
                 <div className="input-wrapper">
                   <input
                     type="text"
-                    id="nombre"
-                    name="nombre"
-                    value={formData.nombre}
+                    id="username"
+                    name="username"
+                    value={formData.username}
                     onChange={handleChange}
-                    placeholder="Tu nombre"
-                  />
-                  <div className="input-icon">
-                    <FaUser />
-                  </div>
-                </div>
-              </div>
-
-              <div className="form-group half">
-                <label htmlFor="apellido">Apellido</label>
-                <div className="input-wrapper">
-                  <input
-                    type="text"
-                    id="apellido"
-                    name="apellido"
-                    value={formData.apellido}
-                    onChange={handleChange}
-                    placeholder="Tu apellido"
+                    placeholder="Tu nombre de usuario"
                   />
                   <div className="input-icon">
                     <FaUser />
@@ -146,13 +126,13 @@ const EditProfile = () => {
 
           {!googleAccountStatus && (
             <div className="google-connect-section">
-              <h3>Sincroniza tu calendario</h3>
-              <p>Conecta tu cuenta de Google para gestionar tus citas médicas en tu calendario</p>
+              <h3>Sincroniza tu calendario con Google Calendar</h3>
+              <p>Inicia sesión con tu cuenta de Google para gestionar tus citas en tu calendario</p>
               <button 
                 className="google-button"
                 type="button"
                 onClick={() =>
-                  window.location.href = "http://localhost:8000/connect-google-account/"
+                  window.location.href = "http://127.0.0.1:8000/connect-google-account/"
                 }
               >
                 <FcGoogle className="google-icon" />

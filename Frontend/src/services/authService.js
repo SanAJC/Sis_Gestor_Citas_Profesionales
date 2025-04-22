@@ -62,15 +62,16 @@ const authService = {
     }
   },
 
-  google_account_status: async (userData) => {
+  google_account_status: async () => {
     try {
-      if (!userData) {
-        return false;
-      }
-      const response = await axiosInstance.get('/google-account-status/', {
-        params: { user: userData }
-      });
-      return response.data;
+      const response = await axios.get('http://localhost:8000/google-account-status/',
+        {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          }
+        }
+      );
+      return response.data.has_google_account;
     } catch (error) {
       console.error('Error checking Google account status:', error);
       return false;

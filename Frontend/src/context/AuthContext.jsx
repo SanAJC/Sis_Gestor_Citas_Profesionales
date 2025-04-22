@@ -9,16 +9,15 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Check if user is already logged in
+    
     const initAuth = async () => {
       try {
         const currentUser = authService.getCurrentUser();
         
-        // If we have a user but the token might be expired, try to refresh it
         if (currentUser && !authService.isAuthenticated()) {
           const refreshed = await authService.refreshToken();
           if (!refreshed) {
-            // If refresh failed, clear user data
+            
             setUser(null);
             authService.logout();
           } else {

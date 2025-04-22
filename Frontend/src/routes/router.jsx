@@ -11,18 +11,43 @@ import '../App.css'
 import LoginSuccess from '../components/Google/LoginSuccess';
 import Citas from '../components/Citas/citas.jsx';
 import EditProfile from '../components/Sidebar/EditProfile.jsx';
-
+import authService from '../services/authService.js';
+import { useState , useEffect } from 'react';
 
 const ProtectedRoute = ({ children }) => {
-    const { user, loading } = useAuth();
-    const access_token = localStorage.getItem('access_token');
-    const location = useLocation();
+  const access_token = localStorage.getItem('access_token');
+  const refresh_token = localStorage.getItem('refresh_token');
+  const location = useLocation();
+  const [loading, setLoading] = useState(true);
+  const [isValid, setIsValid] = useState(false);
+  const [hasAttemptedRefresh, setHasAttemptedRefresh] = useState(false); 
 
-    if (loading) {
-        return <div>Cargando...</div>;
-    }
+  useEffect(() => {
+    const verifyToken = async () => {
+      if (!refresh_token || hasAttemptedRefresh) {
+        setLoading(false);
+        return;
+      }
 
-  if (!access_token) {
+      try {
+        await authService.refreshToken(refresh_token) ;
+        setIsValid(true);
+      } catch (error) {
+        setIsValid(false);
+      } finally {
+        setLoading(false);
+        setHasAttemptedRefresh(true);
+      }
+    };
+
+    verifyToken();
+  }, [access_token,refresh_token, hasAttemptedRefresh]);
+
+  if (loading) {
+      return <div>Cargando...</div>;
+  }
+
+  if (!access_token || !refresh_token || !isValid) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
