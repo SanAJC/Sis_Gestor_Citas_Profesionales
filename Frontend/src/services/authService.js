@@ -62,22 +62,19 @@ const authService = {
     }
   },
 
-  google_account_status: async () => {
-    const {user} = useAuth();
+  google_account_status: async (userData) => {
     try {
-      if (!user) {
+      if (!userData) {
         return false;
       }
-      const response = await axiosInstance.get('/google-account-status/',{user : user});
+      const response = await axiosInstance.get('/google-account-status/', {
+        params: { user: userData }
+      });
       return response.data;
     } catch (error) {
       console.error('Error checking Google account status:', error);
+      return false;
     }
-    
-  },
-
-  connect_google_account: async () => {
-    return redirect('http://localhost:8000/connect-google-account/')
   },
   
   isAuthenticated: () => {

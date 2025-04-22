@@ -9,7 +9,7 @@ class ProfessionalProfile(models.Model):
     horario_atencion = models.JSONField()  # Ejemplo: {"lunes": ["09:00-12:00", "14:00-18:00"], ...}
 
     def __str__(self):
-        return f"{self.user.get_full_name()} - {self.especialidad}"
+        return f"{self.user} - {self.especialidad}"
 
 
 class Reservation(models.Model):

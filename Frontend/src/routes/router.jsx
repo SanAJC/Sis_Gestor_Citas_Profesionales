@@ -9,6 +9,9 @@ import { HomePage } from '../pages/MainContent.jsx';
 import { useAuth } from '../context/AuthContext';
 import '../App.css'
 import LoginSuccess from '../components/Google/LoginSuccess';
+import Citas from '../components/Citas/citas.jsx';
+import EditProfile from '../components/Sidebar/EditProfile.jsx';
+
 
 const ProtectedRoute = ({ children }) => {
     const { user, loading } = useAuth();
@@ -58,7 +61,12 @@ export const AppRouter = () => {
       } />
       <Route path="/consultar-citas" element={
         <ProtectedRoute>
-          <div>Consulta de Citas</div>
+          <Citas/>
+        </ProtectedRoute>
+      } />
+      <Route path="/profile" element={
+        <ProtectedRoute>
+          <EditProfile/>
         </ProtectedRoute>
       } />
 

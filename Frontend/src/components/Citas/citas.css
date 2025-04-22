@@ -1,0 +1,167 @@
+.app-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    font-family: 'Roboto', 'Segoe UI', sans-serif;
+  }
+  
+  .main-content {
+    flex: 1;
+    padding: 2rem;
+  }
+  
+  .main-content h2 {
+    color: #2c3e50;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 0.5rem;
+    display: inline-block;
+  }
+  
+
+  .loading-message, .error-message, .empty-message {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+  }
+  
+  .loading-message {
+    background-color: #f1f9fe;
+    color: #3498db;
+  }
+  
+  .error-message {
+    background-color: #fee8e7;
+    color: #e74c3c;
+  }
+  
+  .empty-message {
+    background-color: #f8f9fa;
+    color: #7f8c8d;
+    border: 1px dashed #bdc3c7;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.1rem;
+  }
+  
+ 
+  .citas-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .cita-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .cita-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+  }
+  
+  .cita-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .cita-estado {
+    font-weight: 600;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+  }
+  
+  .estado-pendiente {
+    background-color: #fff8e1;
+    color: #ffa000;
+  }
+  
+  .estado-aceptada {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+  
+  .estado-rechazada {
+    background-color: #ffebee;
+    color: #c62828;
+  }
+  
+  .estado-cancelada {
+    background-color: #eeeeee;
+    color: #616161;
+  }
+  
+  .cita-fecha {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+  }
+  
+  .cita-hora {
+    display: flex;
+    align-items: center;
+    color: #34495e;
+    margin-top: 0.5rem;
+  }
+  
+  .cita-hora svg {
+    margin-right: 0.5rem;
+    color: #3498db;
+  }
+  
+  .cita-info {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+  }
+  
+  .cita-info-item {
+    display: flex;
+    margin-bottom: 0.5rem;
+  }
+  
+  .cita-info-label {
+    font-weight: 600;
+    width: 100px;
+    color: #7f8c8d;
+  }
+  
+  .cita-info-value {
+    color: #2c3e50;
+    flex: 1;
+  }
+  
+ 
+  @media (max-width: 768px) {
+    .main-content {
+      margin-left: 0;
+      padding: 1rem;
+    }
+    
+    .citas-list {
+      grid-template-columns: 1fr;
+    }
+    
+    .main-content h2 {
+      font-size: 1.5rem;
+    }
+  }
+  

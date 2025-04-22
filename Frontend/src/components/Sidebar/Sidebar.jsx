@@ -21,7 +21,7 @@ const Sidebar = () => {
       </div>
       
       <div className="sidebar-footer">
-        <Link to="/perfil" className="menu-item">
+        <Link to="/profile" className="menu-item">
           <PersonIcon />
           <span>Perfil</span>
         </Link>

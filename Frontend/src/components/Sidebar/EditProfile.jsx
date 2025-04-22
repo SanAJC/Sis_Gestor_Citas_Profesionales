@@ -1,116 +1,176 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './EditProfile.css';
+import authService from '../../services/authService';
+import { useAuth } from '../../context/AuthContext';
+import { FcGoogle } from 'react-icons/fc';
+import { FaUser, FaEnvelope, FaSave, FaTimes, FaCalendarAlt, FaBell } from 'react-icons/fa';
 
 const EditProfile = () => {
+  const { user } = useAuth();
+  const [googleAccountStatus, setGoogleAccountStatus] = useState(null);
   const [formData, setFormData] = useState({
     nombre: '',
     apellido: '',
     email: '',
-    contrasenaActual: '',
-    nuevaContrasena: '',
-    confirmarContrasena: ''
+    notificaciones: true
   });
 
+  useEffect(() => {
+    
+    if (user) {
+      setFormData({
+        nombre: user.nombre || '',
+        apellido: user.apellido || '',
+        email: user.email || '',
+        notificaciones: user.notificaciones !== undefined ? user.notificaciones : true
+      });
+    }
+  }, [user]);
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData(prevState => ({
       ...prevState,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aquí iría la lógica para guardar los cambios
+  
     console.log('Datos del formulario:', formData);
+    
+    alert('Perfil actualizado con éxito');
   };
+
+  useEffect(() => {
+    const checkGoogleStatus = async () => {
+      if (user) {
+        try {
+          const response = await authService.google_account_status(user);
+          setGoogleAccountStatus(response);
+          console.log('Google account status:', response);
+        } catch (error) {
+          console.error('Error checking Google account status:', error);
+        }
+      }
+    };
+
+    checkGoogleStatus();
+  }, [user]);
 
   return (
     <div className="edit-profile-container">
-      <form onSubmit={handleSubmit} className="edit-profile-form">
-        <h2>EDITA TU PERFIL</h2>
+      <div className="profile-card">
+        <div className="card-accent"></div>
+        <div className="accent-circle accent-circle-1"></div>
+        <div className="accent-circle accent-circle-2"></div>
         
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="nombre">NOMBRE</label>
-            <input
-              type="text"
-              id="nombre"
-              name="nombre"
-              value={formData.nombre}
-              onChange={handleChange}
-              placeholder="Juan"
-            />
+        <div className="profile-header">
+          <h2>Mi Perfil</h2>
+          <p>Gestiona tu información personal </p>
+        </div>
+        
+        <form onSubmit={handleSubmit} className="edit-profile-form">
+          <div className="form-section">
+            <div className="form-row">
+              <div className="form-group half">
+                <label htmlFor="nombre">Nombre</label>
+                <div className="input-wrapper">
+                  <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    value={formData.nombre}
+                    onChange={handleChange}
+                    placeholder="Tu nombre"
+                  />
+                  <div className="input-icon">
+                    <FaUser />
+                  </div>
+                </div>
+              </div>
+
+              <div className="form-group half">
+                <label htmlFor="apellido">Apellido</label>
+                <div className="input-wrapper">
+                  <input
+                    type="text"
+                    id="apellido"
+                    name="apellido"
+                    value={formData.apellido}
+                    onChange={handleChange}
+                    placeholder="Tu apellido"
+                  />
+                  <div className="input-icon">
+                    <FaUser />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="email">Correo electrónico</label>
+              <div className="input-wrapper">
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="tucorreo@ejemplo.com"
+                />
+                <div className="input-icon">
+                  <FaEnvelope />
+                </div>
+              </div>
+            </div>
+            
+            <div className="checkbox-container">
+              <label htmlFor="notificaciones" className="checkbox-label">
+                <div className="checkbox-custom">
+                  <input
+                    type="checkbox"
+                    id="notificaciones"
+                    name="notificaciones"
+                    checked={formData.notificaciones}
+                    onChange={handleChange}
+                  />
+                  <span className="slider"></span>
+                </div>
+                <span className="checkbox-text">Recibir notificaciones de citas médicas</span>
+                <FaBell className="notification-icon" />
+              </label>
+            </div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="apellido">APELLIDO</label>
-            <input
-              type="text"
-              id="apellido"
-              name="apellido"
-              value={formData.apellido}
-              onChange={handleChange}
-              placeholder="Arias"
-            />
-          </div>
-        </div>
+          {!googleAccountStatus && (
+            <div className="google-connect-section">
+              <h3>Sincroniza tu calendario</h3>
+              <p>Conecta tu cuenta de Google para gestionar tus citas médicas en tu calendario</p>
+              <button 
+                className="google-button"
+                type="button"
+                onClick={() =>
+                  window.location.href = "http://localhost:8000/connect-google-account/"
+                }
+              >
+                <FcGoogle className="google-icon" />
+                <span>Conectar con Google</span>
+              </button>
+            </div>
+          )}
 
-        <div className="form-group">
-          <label htmlFor="email">EMAIL</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="rimel1111@gmail.com"
-          />
-        </div>
-
-        <div className="password-section">
-          <h3>CAMBIOS DE CONTRASEÑA</h3>
-          <div className="form-group">
-            <input
-              type="password"
-              id="contrasenaActual"
-              name="contrasenaActual"
-              value={formData.contrasenaActual}
-              onChange={handleChange}
-              placeholder="Contraseña actual"
-            />
+          <div className="form-actions">
+            <button type="button" className="cancel-button">
+              <FaTimes /> Cancelar
+            </button>
+            <button type="submit" className="save-button">
+              <FaSave /> Guardar
+            </button>
           </div>
-          <div className="form-group">
-            <input
-              type="password"
-              id="nuevaContrasena"
-              name="nuevaContrasena"
-              value={formData.nuevaContrasena}
-              onChange={handleChange}
-              placeholder="Nueva contraseña"
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="password"
-              id="confirmarContrasena"
-              name="confirmarContrasena"
-              value={formData.confirmarContrasena}
-              onChange={handleChange}
-              placeholder="Confirmar contraseña"
-            />
-          </div>
-        </div>
-
-        <div className="form-actions">
-          <button type="button" className="cancel-button">
-            Cancel
-          </button>
-          <button type="submit" className="save-button">
-            Guardar
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

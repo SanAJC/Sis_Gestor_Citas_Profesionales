@@ -128,7 +128,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'gestor_citas',
         'USER': 'postgres',
-        'PASSWORD': 'san_ats',
+        'PASSWORD': 'admi',
         'HOST': 'localhost',
         'PORT': '5432',
     }
