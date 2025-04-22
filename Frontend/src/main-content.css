@@ -3,6 +3,7 @@
   padding: 2.5rem;
   background-color: #E7E7E9;
   margin: 2rem;
+  margin-top: 0.8rem;
   border-radius: 30px;
   height: 100vh;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
@@ -15,7 +16,6 @@
   align-items: center;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .header-icons {

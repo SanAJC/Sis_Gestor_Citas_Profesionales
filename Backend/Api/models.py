@@ -5,9 +5,9 @@ from Authentication.models import User
 
 class ProfessionalProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    avatar = models.ImageField(upload_to='photos/', blank=True, null=True)
     especialidad = models.CharField(max_length=100)
     horario_atencion = models.JSONField()  # Ejemplo: {"lunes": ["09:00-12:00", "14:00-18:00"], ...}
-
     def __str__(self):
         return f"{self.user} - {self.especialidad}"
 
