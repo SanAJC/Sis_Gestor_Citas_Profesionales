@@ -1,387 +1,376 @@
 .personal-data-form-container {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: relative;
-  background: linear-gradient(45deg, #FF512F, #FF9800);
-  padding: 2rem;
+  padding: 3rem;
+  background: linear-gradient(135deg, #FFFFFF 0%, #E7E7E9 100%);
   overflow-y: auto;
+  gap: 4rem;
+  position: relative;
 }
 
 .personal-data-form-container::before {
   content: '';
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-size: 400% 400%;
-  animation: gradientBG 15s ease infinite;
-  filter: blur(20px);
-  z-index: -1;
-  transform: scale(1.1);
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(169, 173, 182, 0.1) 0%, transparent 25%),
+    radial-gradient(circle at 80% 80%, rgba(231, 231, 233, 0.1) 0%, transparent 25%);
+  animation: backgroundPulse 15s ease infinite;
+  z-index: 0;
 }
 
-@keyframes gradientBG {
-  0% {
-      background-position: 0% 50%;
-  }
-  50% {
-      background-position: 100% 50%;
-  }
-  100% {
-      background-position: 0% 50%;
-  }
+@keyframes backgroundPulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
 }
 
+.appointment-summary-box,
 .personal-data-form {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 3rem;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 3.5rem;
   border-radius: 30px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  backdrop-filter: blur(4px);
-  width: 90%;
-  max-width: 1000px;
-  transform: translateY(0);
-  animation: floatForm 6s ease-in-out infinite;
+  width: 48%;
+  max-width: 600px;
+  min-height: 600px;
   position: relative;
+  z-index: 1;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(169, 173, 182, 0.2);
+  box-shadow: 
+    0 20px 50px rgba(169, 173, 182, 0.2),
+    inset 0 0 30px rgba(231, 231, 233, 0.5);
+  animation: floatIn 1.2s cubic-bezier(0.23, 1, 0.32, 1), float 8s ease-in-out infinite;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  overflow: hidden;
 }
 
-@keyframes floatForm {
-  0%, 100% {
-      transform: translateY(0);
+.appointment-summary-box::before,
+.personal-data-form::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 50%);
+  animation: lightRotate 10s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes lightRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.appointment-summary-box:hover,
+.personal-data-form:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 
+    0 30px 60px rgba(169, 173, 182, 0.3),
+    inset 0 0 40px rgba(231, 231, 233, 0.5);
+}
+
+@keyframes floatIn {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.9);
+    filter: blur(10px);
   }
-  50% {
-      transform: translateY(-10px);
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
   }
 }
 
-.personal-data-form h2 {
-  color: #333;
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.appointment-summary-box h3 {
+  color: #A9ADB6;
   font-size: 2.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 3rem;
   font-weight: 700;
   text-align: center;
-  background: linear-gradient(45deg, #FF512F, #F09819);
-  -webkit-text-fill-color: transparent;
-  animation: titlePulse 2s ease-in-out infinite;
-}
-
-@keyframes titlePulse {
-  0%, 100% {
-      opacity: 1;
-  }
-  50% {
-      opacity: 0.8;
-  }
-}
-
-.form-subtitle {
-  color: #666;
-  margin-bottom: 3rem;
-  font-size: 1.1rem;
-  font-weight: 500;
-  text-align: center;
-  letter-spacing: 2px;
-}
-
-.form-group {
   position: relative;
-  margin-bottom: 2rem;
-  transition: transform 0.3s ease;
+  background: linear-gradient(45deg, #080809, #000000);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: titleGlow 4 ease-in-out infinite;
+  text-shadow: 0 0 30px rgba(169, 173, 182, 0.3);
 }
 
-.form-group:hover {
-  transform: translateX(5px);
+@keyframes titleGlow {
+  0%, 100% { filter: brightness(1) blur(0); }
+  50% { filter: brightness(1.2) blur(1px); }
 }
 
-.form-group label {
-  display: block;
-  margin-bottom: 0.8rem;
-  color: #444;
-  font-size: 1rem;
-  font-weight: 500;
-  transition: color 0.3s ease;
+.appointment-summary-box h3:after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #A9ADB6, #E7E7E9);
+  border-radius: 4px;
+  animation: lineWidth 3s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(169, 173, 182, 0.5);
 }
 
-.form-group:hover label {
-  color: #ff6b6b;
+@keyframes lineWidth {
+  0%, 100% { width: 100px; opacity: 0.7; }
+  50% { width: 150px; opacity: 1; }
 }
 
-.form-group input,
-.form-group select {
-  width: 100%;
-  padding: 1rem 1.5rem;
-  border: 2px solid transparent;
-  border-radius: 15px;
-  font-size: 1rem;
-  color: #333;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-  border-color: #ff6b6b;
-  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.2);
-  transform: translateY(-2px);
-}
-
-.form-group select {
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1.5rem center;
-  background-size: 1.2em;
-  padding-right: 3rem;
-  cursor: pointer;
-}
-
-.submit-button {
-  width: 100%;
-  padding: 1.2rem;
-  background: linear-gradient(45deg, #ff6b6b, #ffa502);
-  color: white;
-  border: none;
+.appointment-summary-box p {
+  margin: 1.5rem 0;
+  font-size: 1.2rem;
+  color: #A9ADB6;
+  background: rgba(231, 231, 233, 0.3);
+  padding: 1.5rem 2rem;
   border-radius: 20px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 3rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  border: 1px solid rgba(169, 173, 182, 0.2);
   position: relative;
   overflow: hidden;
 }
 
-.submit-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-      120deg,
-      transparent,
-      rgba(255, 255, 255, 0.3),
-      transparent
-  );
-  transition: 0.5s;
+.appointment-summary-box p:hover {
+  transform: translateX(10px) scale(1.02);
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(169, 173, 182, 0.4);
+  box-shadow: 0 5px 20px rgba(169, 173, 182, 0.2);
 }
 
-.submit-button:hover::before {
+.appointment-summary-box p::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  transform: rotate(45deg);
+}
+
+.appointment-summary-box p:hover::after {
+  top: 100%;
   left: 100%;
 }
 
-.submit-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 7px 20px rgba(255, 107, 107, 0.4);
+.appointment-summary-box p strong {
+  color: #A9ADB6;
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba(169, 173, 182, 0.3);
 }
 
-.submit-button:active {
-  transform: translateY(-1px);
-}
-
-/* Efectos de hover y focus mejorados */
-.form-group input:hover,
-.form-group select:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-}
-
-/* Animación para los campos cuando aparecen */
-.form-group {
-  opacity: 0;
-  animation: fadeInUp 0.5s ease forwards;
-}
-
-.form-group:nth-child(1) { animation-delay: 0.2s; }
-.form-group:nth-child(2) { animation-delay: 0.4s; }
-.form-group:nth-child(3) { animation-delay: 0.6s; }
-.form-group:nth-child(4) { animation-delay: 0.8s; }
-
-@keyframes fadeInUp {
-  from {
-      opacity: 0;
-      transform: translateY(20px);
-  }
-  to {
-      opacity: 1;
-      transform: translateY(0);
-  }
-}
-
-/* Estilos para el placeholder */
-.form-group input::placeholder {
-  color: #999;
-  opacity: 0.7;
-}
-
-/* Responsive design mejorado */
-@media (max-width: 768px) {
-  .personal-data-form {
-      padding: 2rem;
-      width: 95%;
-  }
-
-  .personal-data-form h2 {
-      font-size: 2rem;
-  }
-
-  .form-subtitle {
-      font-size: 1rem;
-  }
-
-  .form-group input,
-  .form-group select {
-      padding: 0.9rem 1.2rem;
-  }
-
-  .submit-button {
-      padding: 1rem;
-      font-size: 1rem;
-  }
-}
-
-/* Estilos para el resumen de la cita */
-.appointment-summary-box {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  backdrop-filter: blur(4px);
-  width: 90%;
-  max-width: 1000px;
-  margin-bottom: 2rem;
-  animation: fadeInDown 0.5s ease forwards;
-}
-
-.appointment-summary-box h3 {
-  color: #333;
+.form-subtitle {
+  color: #000000;
   font-size: 1.8rem;
-  margin-bottom: 1rem;
   font-weight: 600;
   text-align: center;
-  background: linear-gradient(45deg, #FF512F, #F09819);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  margin-bottom: 3rem;
+  letter-spacing: 2px;
+  text-shadow: 0 0 20px rgba(169, 173, 182, 0.3);
 }
 
-.appointment-summary-box p {
-  margin: 0.5rem 0;
-  font-size: 1.1rem;
-  color: #444;
+.form-group {
+  margin-bottom: 2.5rem;
+  position: relative;
+  animation: fadeIn 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  opacity: 0;
 }
 
-.appointment-summary-box p strong {
-  font-weight: 600;
-  color: #ff6b6b;
-}
+.form-group:nth-child(1) { animation-delay: 0.3s; }
+.form-group:nth-child(2) { animation-delay: 0.5s; }
+.form-group:nth-child(3) { animation-delay: 0.7s; }
 
-/* Animaciones para el resumen de la cita */
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
+@keyframes fadeIn {
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* Estilos para el mensaje de error */
+.form-group input {
+  width: 100%;
+  padding: 1.5rem 2rem;
+  border: 2px solid rgba(169, 173, 182, 0.2);
+  border-radius: 20px;
+  font-size: 1.2rem;
+  color: #A9ADB6;
+  background: rgba(255, 255, 255, 0.8);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.form-group input:hover {
+  border-color: rgba(169, 173, 182, 0.5);
+  transform: translateX(10px);
+  box-shadow: 0 0 30px rgba(169, 173, 182, 0.1);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #A9ADB6;
+  box-shadow: 0 0 0 4px rgba(169, 173, 182, 0.2);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.form-group input::placeholder {
+  color: rgba(169, 173, 182, 0.5);
+}
+
+.submit-button {
+  width: 100%;
+  padding: 1.5rem;
+  background-color:#FEB011;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 20px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  margin-top: 3rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(169, 173, 182, 0.3);
+  text-shadow: 0 2px 10px rgba(169, 173, 182, 0.2);
+}
+
+.submit-button::before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  transform: rotate(45deg);
+}
+
+.submit-button:hover::before {
+  top: 100%;
+  left: 100%;
+}
+
+.submit-button:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 15px 40px rgba(169, 173, 182, 0.4);
+  background: linear-gradient(45deg, #E7E7E9, #A9ADB6);
+}
+
+.submit-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.submit-button:disabled {
+  background: rgba(231, 231, 233, 0.5);
+  color: rgba(169, 173, 182, 0.5);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .error-message {
-  color: #e74c3c;
-  background-color: rgba(231, 76, 60, 0.1);
-  padding: 1rem;
-  border-radius: 10px;
-  margin-top: 1rem;
-  font-size: 0.9rem;
+  background: rgba(229, 62, 62, 0.1);
+  color: #ff6b6b;
+  padding: 1.2rem 1.8rem;
+  border-radius: 15px;
+  margin-top: 2rem;
+  font-size: 1.1rem;
   text-align: center;
-  animation: shake 0.5s ease-in-out;
+  border: 2px solid rgba(229, 62, 62, 0.2);
+  animation: shake 0.5s cubic-bezier(0.36, 0, 0.66, -0.56);
+  backdrop-filter: blur(5px);
 }
 
 @keyframes shake {
-  0%, 100% {transform: translateX(0);}
-  10%, 30%, 50%, 70%, 90% {transform: translateX(-5px);}
-  20%, 40%, 60%, 80% {transform: translateX(5px);}
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
 }
 
-/* Estilos para el textarea */
-.form-group textarea {
-  width: 100%;
-  padding: 1rem 1.5rem;
-  border: 2px solid transparent;
-  border-radius: 15px;
-  font-size: 1rem;
-  color: #333;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  resize: vertical;
-  min-height: 100px;
-}
-
-.form-group textarea:focus {
-  border-color: #ff6b6b;
-  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.2);
-  transform: translateY(-2px);
-}
-
-/* Estilos para el estado de carga */
 .loading {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   width: 100%;
-  background: linear-gradient(45deg, #FF512F, #FF9800);
-  color: white;
+  background: linear-gradient(135deg, #FFFFFF 0%, #E7E7E9 100%);
+  color: #A9ADB6;
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 500;
 }
 
-/* Estilos para botón deshabilitado */
-.submit-button:disabled {
-  background: #cccccc;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-.submit-button:disabled::before {
-  display: none;
-}
-
-.personal-data-form::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  border-radius: 32px;
-  z-index: -1;
-  animation: borderGlow 3s linear infinite;
-  opacity: 0.5;
-}
-
-@keyframes borderGlow {
-  0% {
-      filter: blur(5px);
+@media (max-width: 1200px) {
+  .personal-data-form-container {
+    flex-direction: column;
+    padding: 2rem;
+    gap: 3rem;
   }
-  50% {
-      filter: blur(10px);
+  
+  .personal-data-form,
+  .appointment-summary-box {
+    width: 90%;
+    max-width: 700px;
   }
-  100% {
-      filter: blur(5px);
+  
+  .appointment-summary-box {
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .personal-data-form-container {
+    padding: 1.5rem;
+  }
+  
+  .personal-data-form,
+  .appointment-summary-box {
+    padding: 2.5rem;
+    width: 95%;
+  }
+  
+  .appointment-summary-box h3 {
+    font-size: 2rem;
+  }
+  
+  .form-subtitle {
+    font-size: 1.5rem;
+  }
+  
+  .form-group input {
+    padding: 1.2rem 1.5rem;
+  }
+  
+  .submit-button {
+    padding: 1.2rem;
+    font-size: 1.1rem;
   }
 }

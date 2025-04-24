@@ -5,7 +5,7 @@ import RegisterForm from '../components/Sidebar/RegisterForm.jsx';
 import LoginForm from '../components/Sidebar/LoginForm';
 import AppointmentForm from '../components/Sidebar/AppointmentForm'
 import PersonalDataForm from '../components/Sidebar/PersonalDataForm'
-import { HomePage } from '../pages/MainContent.jsx';
+import  { HomePage } from '../pages/MainContent.jsx';
 import { useAuth } from '../context/AuthContext';
 import '../App.css'
 import LoginSuccess from '../components/Google/LoginSuccess';

@@ -4,9 +4,11 @@ import authService from '../../services/authService';
 import { useAuth } from '../../context/AuthContext';
 import { FcGoogle } from 'react-icons/fc';
 import { FaUser, FaEnvelope, FaSave, FaTimes, FaCalendarAlt, FaBell } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom'; 
 
 const EditProfile = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [googleAccountStatus, setGoogleAccountStatus] = useState(null);
   const [formData, setFormData] = useState({
     username: '',
@@ -15,11 +17,11 @@ const EditProfile = () => {
   });
 
   useEffect(() => {
-    
     if (user) {
       setFormData({
         username: user.username || '',
         email: user.email || '',
+        notificaciones: true 
       });
     }
   }, [user]);
@@ -38,6 +40,12 @@ const EditProfile = () => {
     console.log('Datos del formulario:', formData);
     
     alert('Perfil actualizado con éxito');
+  };
+
+
+  const handleCancel = () => {
+    
+    navigate('/dashboard'); 
   };
 
   useEffect(() => {
@@ -142,7 +150,11 @@ const EditProfile = () => {
           )}
 
           <div className="form-actions">
-            <button type="button" className="cancel-button">
+            <button 
+              type="button" 
+              className="cancel-button"
+              onClick={handleCancel}  
+            >
               <FaTimes /> Cancelar
             </button>
             <button type="submit" className="save-button">

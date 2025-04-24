@@ -57,13 +57,13 @@ const PersonalDataForm = () => {
       
       // Enviar la reservación completa al backend
       const response = await reservationService.createReservation(completeReservationData);
-      
       // Redirigir a una página de confirmación o a la página de inicio
       navigate('/app', { 
         state: { 
           reservationId: response.id,
           appointmentDetails: appointmentDetails,
-          personalData: formData
+          personalData: formData,
+          mensaje: "Reserva creada correctamente"
         } 
       });
       

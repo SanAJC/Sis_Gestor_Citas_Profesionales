@@ -39,7 +39,8 @@ const reservationService = {
   createReservation: async (reservationData) => {
     try {
       const response = await axiosInstance.post('/citas/', reservationData);
-      return response.data;
+      const mensaje = "Cita creada correctamente";
+      return response.data , mensaje;
     } catch (error) {
       console.error('Error creating reservation:', error);
       throw error;
