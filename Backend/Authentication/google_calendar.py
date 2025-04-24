@@ -11,6 +11,11 @@ class GoogleCalendarService:
             social_account = SocialAccount.objects.get(user=user, provider='google')
             social_token = SocialToken.objects.get(account=social_account)
             
+            # Verificar si tenemos el refresh_token
+            if not social_token.token_secret:
+                print(f"Error: No se encontró refresh_token para el usuario {user.username}")
+                return None
+                
             credentials = Credentials(
                 token=social_token.token,
                 refresh_token=social_token.token_secret,
@@ -21,7 +26,8 @@ class GoogleCalendarService:
             )
             
             return credentials
-        except (SocialAccount.DoesNotExist, SocialToken.DoesNotExist):
+        except (SocialAccount.DoesNotExist, SocialToken.DoesNotExist) as e:
+            print(f"Error al obtener credenciales para Google Calendar: {e}")
             return None
     
     @staticmethod

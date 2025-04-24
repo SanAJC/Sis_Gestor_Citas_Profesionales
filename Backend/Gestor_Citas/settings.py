@@ -68,10 +68,11 @@ SOCIALACCOUNT_PROVIDERS = {
         'SCOPE': [ # Los permisos que solicitas
             'profile',
             'email',
+            'https://www.googleapis.com/auth/calendar',
         ],
         'AUTH_PARAMS': { # Parámetros adicionales para la autenticación
-            'access_type': 'online',
-            'prompt': 'select_account',
+            'access_type': 'offline',
+            'prompt': 'consent',
         },
         'OAUTH_PKCE_ENABLED': True, # Recomendado para seguridad
     }

@@ -52,23 +52,42 @@ class ReservationViewSet(viewsets.ModelViewSet):
         super().perform_destroy(instance)
     
     def _sync_with_google_calendar(self, reservation):
-        if hasattr(reservation.cliente, 'socialaccount_set'):
+        try:
+            # Verificar si el usuario tiene una cuenta de Google vinculada
+            if not hasattr(reservation.cliente, 'socialaccount_set'):
+                print(f"El usuario {reservation.cliente.username} no tiene cuentas sociales vinculadas")
+                return
+                
             social_account = SocialAccount.objects.filter(user=reservation.cliente, provider='google').first()
-            if social_account:
-                if reservation.google_calendar_event_id:
-                    GoogleCalendarService.update_calendar_event(
-                        reservation.cliente, 
-                        reservation, 
-                        reservation.google_calendar_event_id
-                    )
+            if not social_account:
+                print(f"El usuario {reservation.cliente.username} no tiene una cuenta de Google vinculada")
+                return
+                
+            # Verificar si ya existe un evento en Google Calendar para esta reserva
+            if reservation.google_calendar_event_id:
+                result = GoogleCalendarService.update_calendar_event(
+                    reservation.cliente, 
+                    reservation, 
+                    reservation.google_calendar_event_id
+                )
+                if result:
+                    print(f"Evento de Google Calendar actualizado correctamente para la reserva {reservation.id}")
                 else:
-                    event_id = GoogleCalendarService.create_calendar_event(
-                        reservation.cliente, 
-                        reservation
-                    )
-                    if event_id:
-                        reservation.google_calendar_event_id = event_id
-                        reservation.save(update_fields=['google_calendar_event_id'])
+                    print(f"No se pudo actualizar el evento de Google Calendar para la reserva {reservation.id}")
+            else:
+                # Crear un nuevo evento en Google Calendar
+                event_id = GoogleCalendarService.create_calendar_event(
+                    reservation.cliente, 
+                    reservation
+                )
+                if event_id:
+                    print(f"Evento de Google Calendar creado correctamente con ID: {event_id}")
+                    reservation.google_calendar_event_id = event_id
+                    reservation.save(update_fields=['google_calendar_event_id'])
+                else:
+                    print(f"No se pudo crear el evento de Google Calendar para la reserva {reservation.id}")
+        except Exception as e:
+            print(f"Error al sincronizar con Google Calendar: {e}")
     
     def _create_notification(self, reservation, action_type):
         mensaje = f"Tu cita ha sido {action_type}. Fecha: {reservation.fecha.strftime('%d/%m/%Y')}, " \
