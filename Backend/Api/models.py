@@ -30,29 +30,7 @@ class Reservation(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def clean(self):
-        # Evitar citas en el pasado
-        fecha_hora = timezone.datetime.combine(self.fecha, self.hora_inicio)
-        if fecha_hora < timezone.now():
-            raise ValidationError("No se pueden agendar citas en el pasado.")
-        
-        # Validar disponibilidad: evitar solapamientos
-        citas_conflictivas = Reservation.objects.filter(
-            cliente=self.cliente,
-            profesional=self.profesional,
-            fecha=self.fecha,
-            hora_inicio__lt=self.hora_fin,
-            hora_fin__gt=self.hora_inicio
-        )
-        if self.pk:
-            citas_conflictivas = citas_conflictivas.exclude(pk=self.pk)
-        if citas_conflictivas.exists():
-            raise ValidationError("El profesional ya tiene una cita en este horario.")
-    
-    def save(self, *args, **kwargs):
-        self.full_clean()  # Ejecuta validaciones antes de guardar
-        super().save(*args, **kwargs)
-    
+
     def __str__(self):
         return f"Cita de {self.cliente} con {self.profesional} el {self.fecha} de {self.hora_inicio} a {self.hora_fin}"
     

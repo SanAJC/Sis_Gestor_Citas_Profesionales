@@ -2,12 +2,14 @@
   width: 100%;
   height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
   background: linear-gradient(45deg, #FF512F, #FF9800);
+  padding: 2rem;
+  overflow-y: auto;
 }
-
 
 .personal-data-form-container::before {
   content: '';
@@ -247,6 +249,117 @@
   }
 }
 
+/* Estilos para el resumen de la cita */
+.appointment-summary-box {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  width: 90%;
+  max-width: 1000px;
+  margin-bottom: 2rem;
+  animation: fadeInDown 0.5s ease forwards;
+}
+
+.appointment-summary-box h3 {
+  color: #333;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  text-align: center;
+  background: linear-gradient(45deg, #FF512F, #F09819);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.appointment-summary-box p {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+  color: #444;
+}
+
+.appointment-summary-box p strong {
+  font-weight: 600;
+  color: #ff6b6b;
+}
+
+/* Animaciones para el resumen de la cita */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Estilos para el mensaje de error */
+.error-message {
+  color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.1);
+  padding: 1rem;
+  border-radius: 10px;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% {transform: translateX(0);}
+  10%, 30%, 50%, 70%, 90% {transform: translateX(-5px);}
+  20%, 40%, 60%, 80% {transform: translateX(5px);}
+}
+
+/* Estilos para el textarea */
+.form-group textarea {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border: 2px solid transparent;
+  border-radius: 15px;
+  font-size: 1rem;
+  color: #333;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-group textarea:focus {
+  border-color: #ff6b6b;
+  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Estilos para el estado de carga */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  background: linear-gradient(45deg, #FF512F, #FF9800);
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* Estilos para botón deshabilitado */
+.submit-button:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.submit-button:disabled::before {
+  display: none;
+}
 
 .personal-data-form::before {
   content: '';

@@ -5,21 +5,22 @@ from Authentication.models import User
 
 class ProfessionalProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
-    image = serializers.SerializerMethodField()
+    avatar = serializers.SerializerMethodField()
     
-    def get_image(self, obj):
-        return obj.image.url if obj.image else None
+    def get_avatar(self, obj):
+        return obj.avatar.url if obj.avatar else None
     
     class Meta:
         model = ProfessionalProfile
         fields = '__all__'
 
 class ReservationSerializer(serializers.ModelSerializer):
-    cliente = UserSerializer(read_only=True)
+    cliente = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    
     class Meta:
         model = Reservation
         fields = '__all__'
-
+        
 class NotificationSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     class Meta:

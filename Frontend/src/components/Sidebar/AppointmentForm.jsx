@@ -175,32 +175,31 @@ const AppointmentScheduler = () => {
       // Calcular hora de fin (1 hora después)
       const horaFin = calcularHoraFin(selectedTime);
       
-      // Crear el objeto de reservación según tu modelo Django
+      // Preparar los datos de la reservación para pasarlos al siguiente formulario
       const reservationData = {
         cliente: user.id,
         profesional: selectedProfessional.id,
         fecha: formattedDate,
         hora_inicio: `${selectedTime}:00`,
         hora_fin: `${horaFin}:00`,
-        estado: 'P' // Pendiente por defecto
+        estado: 'P' 
       };
-      
-      // Enviar la reservación al backend
-      await reservationService.createReservation(reservationData);
       
       // Redireccionar con los detalles de la cita
       navigate("/formulario-persona", { 
         state: { 
+          reservationData: reservationData,
           appointmentDetails: {
             fecha: formattedDate,
             hora_inicio: selectedTime,
+            hora_fin: horaFin,
             profesional: selectedProfessional
           } 
         } 
       });
     } catch (error) {
-      console.error("Error al agendar cita:", error);
-      setError("Ha ocurrido un error al agendar la cita. Por favor intenta nuevamente.");
+      console.error("Error al preparar cita:", error);
+      setError("Ha ocurrido un error al preparar la cita. Por favor intenta nuevamente.");
     } finally {
       setSubmitting(false);
     }
@@ -242,6 +241,9 @@ const AppointmentScheduler = () => {
     );
   }
 
+  const baseURL = "http://localhost:8000";
+  const imageUrl = `${baseURL}${selectedProfessional.avatar}`;
+
   // Pantalla de programación de cita
   return (
     <div className="appointment-container">
@@ -255,9 +257,9 @@ const AppointmentScheduler = () => {
 
         <div className="selected-professional">
           <div className="professional-image">
-            {selectedProfessional.image ? (
+            {selectedProfessional.avatar ? (
               <img
-                src={selectedProfessional.image}
+                src={imageUrl}
                 alt={selectedProfessional.name || selectedProfessional.especialidad}
               />
             ) : (
@@ -265,7 +267,7 @@ const AppointmentScheduler = () => {
             )}
           </div>
           <div className="professional-info">
-            <h3>{selectedProfessional.name || selectedProfessional.user?.first_name || selectedProfessional.especialidad}</h3>
+            <h3>{selectedProfessional.user.username || selectedProfessional.user?.first_name || selectedProfessional.especialidad}</h3>
             <p className="specialty">{selectedProfessional.especialidad}</p>
           </div>
         </div>
