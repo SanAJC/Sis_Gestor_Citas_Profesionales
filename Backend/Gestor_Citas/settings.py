@@ -41,6 +41,7 @@ GOOGLE_OAUTH_CLIENT_SECRET = os.getenv('GOOGLE_OAUTH_CLIENT_SECRET')
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -134,7 +135,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'gestor_citas',
         'USER': 'postgres',
-        'PASSWORD': 'admi',
+        'PASSWORD': 'san_ats',
         'HOST': 'localhost',
         'PORT': '5432',
     }

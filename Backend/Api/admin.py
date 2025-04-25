@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import ProfessionalProfile, Reservation, Notification
 
-admin.site.site_header = "Panel de Administración - Argon Dashboard"
+admin.site.site_header = "Gestor de Citas"
 admin.site.index_title = "Dashboard"
 
 # Registra los modelos
