@@ -5,7 +5,7 @@
   margin: 2rem;
   margin-top: 0.8rem;
   border-radius: 30px;
-  height: 100vh;
+  max-height: 100vh;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
 }

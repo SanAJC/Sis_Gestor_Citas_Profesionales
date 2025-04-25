@@ -24,9 +24,9 @@ axiosInstance.interceptors.request.use(
 const reservationService = {
   // Obtener todas las reservaciones del usuario actual
   getUserReservations: async () => {
-    const {user} = useAuth();
+    const {user} = localStorage.getItem('user');
     try {
-      const response = await axiosInstance.get('/citas/my-reservationsr/',{user : user});
+      const response = await axiosInstance.get('/citas/my-reservations/',{user : user});
       return response.data;
     } catch (error) {
       console.error('Error fetching user reservations:', error);

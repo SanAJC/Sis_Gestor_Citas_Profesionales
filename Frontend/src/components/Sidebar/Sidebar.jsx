@@ -14,7 +14,7 @@ const Sidebar = () => {
           <HomeIcon />
           <span>Inicio</span>
         </Link>
-        <Link to="/citas" className="menu-item">
+        <Link to="/consultar-citas" className="menu-item">
           <EventNoteIcon />
           <span>Citas</span>
         </Link>

@@ -35,7 +35,7 @@ export const HomePage = () => {
         <div className="welcome-section">
           <div className="welcome-text">
             <h2>Bienvenido/a</h2>
-            <p>Actualmente, tienes 0 cita(s) agendada(s) en tu historial.</p>
+            <p>Consulta tus citas agendadas con tu profesional aqui.</p>
             <p>
               Recuerda que puedes gestionar, modificar o programar nuevas citas
               en cualquier momento. ¡Gracias por confiar en nosotros para

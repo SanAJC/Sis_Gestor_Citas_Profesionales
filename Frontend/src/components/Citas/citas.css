@@ -1,166 +1,521 @@
+/* Contenedores principales */
 .app-container {
-    display: flex;
-    min-height: 100vh;
-    background-color: #f8f9fa;
-    font-family: 'Roboto', 'Segoe UI', sans-serif;
-  }
-  
-  .main-content {
-    flex: 1;
-    padding: 2rem;
-  }
-  
-  .main-content h2 {
-    color: #2c3e50;
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-    font-weight: 600;
-    padding-bottom: 0.5rem;
-    display: inline-block;
-  }
-  
+  display: flex;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  font-family: 'Roboto', 'Segoe UI', sans-serif;
+}
 
-  .loading-message, .error-message, .empty-message {
-    text-align: center;
-    padding: 2rem;
-    border-radius: 8px;
-    margin: 1rem 0;
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  
+}
+
+.cita-header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+  position: relative;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(52, 152, 219, 0.1);
+}
+
+.main-content h2 {
+  color: #2c3e50;
+  font-size: 2.2rem;
+  margin-bottom: 0;
+  font-weight: 700;
+  position: relative;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+
+.main-content h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(to right, #3498db, #1abc9c);
+  margin-top: 10px;
+  border-radius: 3px;
+}
+
+.cita-counter-badge {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.5rem 1.2rem;
+  border-radius: 30px;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.cita-counter-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+}
+
+/* Spinner para carga */
+.cita-spinner {
+  border: 3px solid rgba(52, 152, 219, 0.1);
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: cita-spin 1s linear infinite;
+  margin: 0 auto 1.5rem auto;
+}
+
+@keyframes cita-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.cita-loading-message, .cita-error-message, .cita-empty-message {
+  text-align: center;
+  padding: 3rem;
+  border-radius: 16px;
+  margin: 2rem 0;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.cita-loading-message {
+  background: linear-gradient(to bottom, #f1f9fe, #e1f0fa);
+  color: #3498db;
+}
+
+.cita-error-message {
+  background: linear-gradient(to bottom, #fee8e7, #fddad8);
+  color: #e0e0d7;
+}
+
+.cita-empty-message {
+  background: linear-gradient(to bottom, #f8f9fa, #ecf0f1);
+  color: #7f8c8d;
+  border: 2px dashed #bdc3c7;
+  padding: 3.5rem;
+  border-radius: 16px;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.cita-empty-message svg {
+  margin-bottom: 1.5rem;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.cita-empty-message:hover svg {
+  transform: scale(1.1);
+  opacity: 0.9;
+}
+
+.cita-empty-subtitle {
+  font-size: 1rem;
+  opacity: 0.7;
+  margin-top: 0.8rem;
+}
+
+/* Cards de citas mejoradas */
+.cita-list-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.cita-item-card {
+  background: linear-gradient(145deg, #ffffff, #f9fcff);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  padding: 1.8rem;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  border-top: 5px solid transparent;
+  transform-origin: center;
+}
+
+.cita-item-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(52, 152, 219, 0.15);
+}
+
+.cita-item-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 90px;
+  height: 90px;
+  background: linear-gradient(135deg, transparent 50%, rgba(52, 152, 219, 0.05) 50%);
+  border-radius: 0 0 0 16px;
+  z-index: 0;
+}
+
+/* Estilo condicional por estado */
+.cita-item-card:has(.cita-estado-pendiente) {
+  border-top-color: #ffa000;
+}
+
+.cita-item-card:has(.cita-estado-aceptada) {
+  border-top-color: #2e7d32;
+}
+
+.cita-item-card:has(.cita-estado-rechazada) {
+  border-top-color: #c62828;
+}
+
+.cita-item-card:has(.cita-estado-cancelada) {
+  border-top-color: #616161;
+}
+
+.cita-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.cita-item-estado {
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 30px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.cita-item-estado:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+}
+
+.cita-estado-pendiente {
+  background: linear-gradient(to right, #fff8e1, #ffecb3);
+  color: #ffa000;
+}
+
+.cita-estado-aceptada {
+  background: linear-gradient(to right, #e8f5e9, #c8e6c9);
+  color: #2e7d32;
+}
+
+.cita-estado-rechazada {
+  background: linear-gradient(to right, #ffebee, #ffcdd2);
+  color: #c62828;
+}
+
+.cita-estado-cancelada {
+  background: linear-gradient(to right, #eeeeee, #e0e0e0);
+  color: #616161;
+}
+
+.cita-item-fecha {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.8rem;
+  text-transform: capitalize;
+  position: relative;
+  z-index: 1;
+}
+
+.cita-item-hora {
+  display: flex;
+  align-items: center;
+  color: #34495e;
+  margin-top: 0.8rem;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+}
+
+.cita-item-hora svg {
+  margin-right: 0.8rem;
+  color: #3498db;
+  transition: all 0.3s ease;
+}
+
+.cita-item-card:hover .cita-item-hora svg {
+  transform: rotate(360deg);
+}
+
+.cita-item-info {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(240, 242, 245, 0.8);
+  position: relative;
+  z-index: 1;
+}
+
+.cita-item-info-row {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.cita-item-info-label {
+  font-weight: 600;
+  width: 110px;
+  color: #7f8c8d;
+}
+
+.cita-item-info-value {
+  color: #2c3e50;
+  flex: 1;
+  font-weight: 500;
+}
+
+/* Sistema de paginación moderno y transparente */
+.cita-pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5rem auto 3rem;
+  padding: 1.5rem 2rem;
+  background: transparent;
+  border-radius: 16px;
+  max-width: 700px;
+}
+
+.cita-pagination-button {
+  background: rgba(248, 249, 250, 0.7);
+  border: none;
+  color: #34495e;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.4rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  margin: 0 0.8rem;
+}
+
+.cita-pagination-button:hover:not(.cita-disabled) {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 7px 20px rgba(52, 152, 219, 0.4);
+}
+
+.cita-pagination-button.cita-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.cita-pagination-numbers {
+  display: flex;
+  align-items: center;
+  margin: 0 2rem;
+}
+
+.cita-pagination-number {
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 8px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(248, 249, 250, 0.7);
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: #34495e;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.cita-pagination-number:hover:not(.cita-active) {
+  background-color: rgba(232, 244, 252, 0.8);
+  transform: translateY(-3px);
+  box-shadow: 0 7px 20px rgba(0, 0, 0, 0.12);
+}
+
+.cita-pagination-number.cita-active {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  font-weight: 700;
+  transform: scale(1.15);
+  box-shadow: 0 7px 20px rgba(52, 152, 219, 0.4);
+}
+
+.cita-pagination-ellipsis {
+  margin: 0 10px;
+  color: #95a5a6;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+/* SVG dentro de los botones - más grandes */
+.cita-pagination-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Animaciones para la paginación */
+.cita-pagination-container {
+  animation: cita-fadeIn 0.5s ease forwards;
+}
+
+.cita-pagination-button, .cita-pagination-number {
+  animation: cita-scaleIn 0.3s ease forwards;
+}
+
+@keyframes cita-fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cita-scaleIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Animaciones de transición */
+.cita-item-card {
+  animation: cita-fadeInUp 0.5s ease forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes cita-fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Cada tarjeta aparece con un pequeño retraso */
+.cita-item-card:nth-child(1) { animation-delay: 0.1s; }
+.cita-item-card:nth-child(2) { animation-delay: 0.2s; }
+.cita-item-card:nth-child(3) { animation-delay: 0.3s; }
+.cita-item-card:nth-child(4) { animation-delay: 0.4s; }
+
+/* Efectos adicionales para mejorar la interactividad */
+.cita-item-card:active {
+  transform: scale(0.98);
+}
+
+.cita-pagination-number:active, .cita-pagination-button:active {
+  transform: scale(0.95);
+}
+
+/* Media query para dispositivos móviles */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1.5rem;
   }
   
-  .loading-message {
-    background-color: #f1f9fe;
-    color: #3498db;
-  }
-  
-  .error-message {
-    background-color: #fee8e7;
-    color: #e74c3c;
-  }
-  
-  .empty-message {
-    background-color: #f8f9fa;
-    color: #7f8c8d;
-    border: 1px dashed #bdc3c7;
-    padding: 2rem;
-    border-radius: 8px;
-    text-align: center;
-    font-size: 1.1rem;
-  }
-  
- 
-  .citas-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  .cita-list-container {
+    grid-template-columns: 1fr;
     gap: 1.5rem;
   }
   
-  .cita-card {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    padding: 1.5rem;
-    transition: transform 0.2s, box-shadow 0.2s;
-    position: relative;
-    overflow: hidden;
+  .main-content h2 {
+    font-size: 1.8rem;
+  }
+
+  .cita-header-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cita-counter-badge {
+    margin-top: 0.8rem;
+  }
+
+  .cita-pagination-container {
+    padding: 1rem;
+    margin: 4rem auto 2.5rem;
   }
   
-  .cita-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+  .cita-pagination-button {
+    width: 50px;
+    height: 50px;
   }
   
-  .cita-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+  .cita-pagination-number {
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
+    margin: 0 5px;
   }
   
-  .cita-estado {
-    font-weight: 600;
-    padding: 0.4rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    text-transform: uppercase;
+  .cita-pagination-ellipsis {
+    margin: 0 5px;
   }
   
-  .estado-pendiente {
-    background-color: #fff8e1;
-    color: #ffa000;
+  .cita-empty-message, .cita-loading-message, .cita-error-message {
+    padding: 2rem;
+  }
+}
+
+
+@media (prefers-color-scheme: dark) {
+  .app-container {
+    background-color: #fbfcff;
   }
   
-  .estado-aceptada {
-    background-color: #e8f5e9;
-    color: #2e7d32;
+  .main-content {
+    background-color: #E7E7E9;
   }
   
-  .estado-rechazada {
-    background-color: #ffebee;
-    color: #c62828;
+  .main-content h2 {
+    background-color: #000;
+    -webkit-background-clip: text;
+    background-clip: text;
   }
   
-  .estado-cancelada {
-    background-color: #eeeeee;
-    color: #616161;
+  .cita-item-card {
+    background: #FFF;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   }
   
-  .cita-fecha {
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: #2c3e50;
-    margin-bottom: 0.5rem;
+  .cita-item-fecha, .cita-item-info-value {
+    color: #111214;
   }
   
-  .cita-hora {
-    display: flex;
-    align-items: center;
-    color: #34495e;
-    margin-top: 0.5rem;
+  .cita-item-hora {
+    color: #a0aec0;
   }
   
-  .cita-hora svg {
-    margin-right: 0.5rem;
-    color: #3498db;
+  .cita-item-info-label {
+    color: #a0aec0;
   }
   
-  .cita-info {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid #eee;
+  .cita-pagination-button, .cita-pagination-number {
+    background: rgba(45, 55, 72, 0.7);
+    color: #e2e8f0;
   }
   
-  .cita-info-item {
-    display: flex;
-    margin-bottom: 0.5rem;
+  .cita-pagination-ellipsis {
+    color: #a0aec0;
   }
   
-  .cita-info-label {
-    font-weight: 600;
-    width: 100px;
-    color: #7f8c8d;
+  .cita-empty-message {
+    background: linear-gradient(to bottom, #2d3748, #1a202c);
+    border-color: #4a5568;
+    color: #a0aec0;
   }
-  
-  .cita-info-value {
-    color: #2c3e50;
-    flex: 1;
-  }
-  
- 
-  @media (max-width: 768px) {
-    .main-content {
-      margin-left: 0;
-      padding: 1rem;
-    }
-    
-    .citas-list {
-      grid-template-columns: 1fr;
-    }
-    
-    .main-content h2 {
-      font-size: 1.5rem;
-    }
-  }
-  
+}
